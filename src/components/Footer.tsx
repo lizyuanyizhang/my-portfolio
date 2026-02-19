@@ -49,11 +49,11 @@ export const Footer: React.FC = () => {
                 <MessageCircle size={18} />
                 <span>微信公众号</span>
                 <div className="absolute left-0 bottom-full mb-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  <div className="bg-white p-2 rounded-xl shadow-2xl">
+                  <div className="bg-white p-4 rounded-xl shadow-2xl">
                     <img 
                       src={personalInfo.wechatQR} 
                       alt="WeChat QR" 
-                      className="w-40 h-auto rounded-lg"
+                      className="w-64 h-auto rounded-lg"
                       referrerPolicy="no-referrer"
                     />
                     <p className="text-ink text-[10px] text-center mt-2 font-sans">扫码关注公众号</p>

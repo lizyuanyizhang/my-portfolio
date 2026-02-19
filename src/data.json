@@ -1,6 +1,6 @@
 {
   "personalInfo": {
-    "name": "张苑逸/Yuanyi Zhang/Liz Zhang",
+    "name": "张苑逸 LIZ ZHANG",
     "title": "headhunter / 未来摄影师 / 写作者/ vibe coder / 终身学习者",
     "language": "Mandarin/ English/ A little bit German",
     "bio": "探索科技与人文的交汇点。热衷于通过代码构建有温度的数字体验，通过镜头捕捉生活中的宁静瞬间。",
@@ -17,16 +17,18 @@
   "projects": [
     {
       "id": "1",
-      "title": "Vibe Coding Project A",
-      "description": "一个探索生成式艺术与交互设计的实验项目。通过代码捕捉情绪的流动。",
-      "image": "/images/projects/vibe1.jpg",
+      "title": "新年祝福卡片生成器",
+      "description": "接入大模型api去优化祝福词的卡片生成器。",
+      "image": "/images/projects/newyear-card.png",
       "tags": [
         "React",
-        "Three.js",
-        "Generative"
+        "新春贺卡",
+        "AI",
+        "千问"
       ],
       "date": "2024",
-      "link": "#"
+      "link": "https://newyear-card-generator-55mu.vercel.app/",
+      "builtWith": ["Cursor", "React", "Vite"]
     }
   ],
   "essays": [

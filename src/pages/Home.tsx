@@ -33,15 +33,13 @@ export const Home: React.FC = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="space-y-8"
+          className="space-y-6"
         >
-          <h1 className="text-6xl md:text-8xl font-serif leading-tight tracking-tight text-ink">
-            {personalInfo.name.split('/').map((part, i) => (
-              <React.Fragment key={i}>
-                {part}
-                {i < personalInfo.name.split('/').length - 1 && <br />}
-              </React.Fragment>
-            ))}
+          <h1 className="font-serif text-2xl md:text-3xl font-medium leading-tight tracking-tight text-muted mb-8">
+            {(personalInfo.name.split(' ')[0])}{' '}
+            {personalInfo.name.split(' ').slice(1).join(' ') && (
+              <span className="font-normal uppercase">{(personalInfo.name.split(' ').slice(1).join(' '))}</span>
+            )}
           </h1>
           <p className="text-xl md:text-2xl text-muted font-serif italic">
             {personalInfo.title}
@@ -81,11 +79,11 @@ export const Home: React.FC = () => {
                   </span>
                   <span className="text-sm font-medium">微信公众号</span>
                   <div className="absolute left-0 bottom-full mb-3 opacity-0 group-hover:opacity-100 transition-all pointer-events-none translate-y-2 group-hover:translate-y-0 z-10">
-                    <div className="bg-white p-3 rounded-2xl shadow-xl border border-ink/10">
+                    <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10">
                       <img 
                         src={personalInfo.wechatQR} 
                         alt="WeChat QR" 
-                        className="w-40 h-auto rounded-lg"
+                        className="w-64 h-auto rounded-lg"
                         referrerPolicy="no-referrer"
                       />
                       <p className="text-ink text-xs text-center mt-2 font-sans">扫码关注公众号</p>

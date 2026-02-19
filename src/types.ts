@@ -6,6 +6,8 @@ export interface Project {
   link?: string;
   date?: string;
   tags?: string[];
+  /** 使用的技术栈 / 工具，如 "Cursor · React · Vercel" */
+  builtWith?: string[];
 }
 
 export interface Essay {

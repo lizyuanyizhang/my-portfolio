@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import data from '../data.json';
-import { LayoutGrid, LayoutList, ExternalLink } from 'lucide-react';
+import { LayoutGrid, Rows3 } from 'lucide-react';
 import type { Photo } from '../types';
 
 type LayoutMode = 'grid' | 'waterfall';
@@ -18,41 +18,37 @@ export const Photography: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-5xl md:text-6xl font-serif text-ink mb-8">摄影</h1>
-          <div className="h-px w-24 bg-accent/30 mb-6" />
-          <p className="text-muted font-serif italic text-lg mb-8">
-            用镜头记录下的瞬间
-          </p>
-
-          {/* 布局切换 & 上传提示 */}
-          <div className="flex flex-wrap items-center gap-4 mb-10">
-            <div className="flex rounded-full border border-ink/10 p-1">
+          {/* 头部：标题 + 副标题 左侧，布局切换 右侧 —— 参考摄影画廊极简布局 */}
+          <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-serif text-ink mb-3">摄影</h1>
+              <div className="h-px w-16 bg-accent/20 mb-4" />
+              <p className="text-muted font-serif italic text-base max-w-md">
+                用镜头捕捉的瞬间，留住值得回望的风景。
+              </p>
+            </div>
+            {/* 布局切换：图标优先，低调不抢戏 */}
+            <div className="flex rounded-lg border border-ink/10 p-0.5 shrink-0" aria-label="切换显示布局">
               <button
                 onClick={() => setLayout('grid')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  layout === 'grid' ? 'bg-ink text-paper' : 'text-muted hover:text-ink'
+                title="网格"
+                className={`p-2.5 rounded-md transition-all ${
+                  layout === 'grid' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
                 }`}
               >
-                <LayoutGrid size={16} /> 网格
+                <LayoutGrid size={18} strokeWidth={1.5} />
               </button>
               <button
                 onClick={() => setLayout('waterfall')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  layout === 'waterfall' ? 'bg-ink text-paper' : 'text-muted hover:text-ink'
+                title="瀑布流"
+                className={`p-2.5 rounded-md transition-all ${
+                  layout === 'waterfall' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
                 }`}
               >
-                <LayoutList size={16} /> 瀑布流
+                <Rows3 size={18} strokeWidth={1.5} />
               </button>
             </div>
-            <a
-              href="https://img.scdn.io"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 text-xs text-muted hover:text-accent transition-colors"
-            >
-              <ExternalLink size={12} /> 使用 img.scdn.io 拖拽上传图片，复制链接至 data.json
-            </a>
-          </div>
+          </header>
 
           {/* 相册展示 */}
           {photos.length === 0 ? (

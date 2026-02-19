@@ -42,25 +42,25 @@ export const Navbar: React.FC = () => {
           )}
         </div>
         
-        <div className="flex items-center gap-4 md:gap-8 text-sm font-medium shrink-0">
-          <Link to="/" className={`hover:text-accent transition-colors ${isHome ? 'text-accent' : 'text-muted'}`}>
+        <div className="flex items-center gap-2 md:gap-6 text-sm font-medium shrink-0">
+          <Link to="/" className={`px-3 py-2 rounded-lg transition-all duration-200 ${isHome ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             首页
           </Link>
-          <Link to="/resume" className={`hover:text-accent transition-colors ${location.pathname === '/resume' ? 'text-accent' : 'text-muted'}`}>
+          <Link to="/resume" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/resume' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             简历
           </Link>
-          <Link to="/essays" className={`hover:text-accent transition-colors ${location.pathname.startsWith('/essays') ? 'text-accent' : 'text-muted'}`}>
+          <Link to="/essays" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/essays') ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             文字
           </Link>
-          <Link to="/photography" className={`hover:text-accent transition-colors ${location.pathname === '/photography' ? 'text-accent' : 'text-muted'}`}>
+          <Link to="/photography" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/photography' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             摄影
           </Link>
-          <Link to="/apps" className={`hover:text-accent transition-colors ${location.pathname === '/apps' ? 'text-accent' : 'text-muted'}`}>
+          <Link to="/apps" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/apps' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             应用
           </Link>
           <Link 
             to="/timeline"
-            className={`hover:text-accent transition-colors ${location.pathname === '/timeline' ? 'text-accent' : 'text-muted'}`}
+            className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/timeline' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}
             onClick={(e) => {
               if (location.pathname === '/timeline') {
                 e.preventDefault();
@@ -70,10 +70,10 @@ export const Navbar: React.FC = () => {
           >
             时间轴
           </Link>
-          <Link to="/audio" className={`hover:text-accent transition-colors ${location.pathname === '/audio' ? 'text-accent' : 'text-muted'}`}>
+          <Link to="/audio" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/audio' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             声音
           </Link>
-          <Link to="/video" className={`hover:text-accent transition-colors ${location.pathname === '/video' ? 'text-accent' : 'text-muted'}`}>
+          <Link to="/video" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/video' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             影像
           </Link>
         </div>
