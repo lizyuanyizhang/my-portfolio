@@ -1,0 +1,102 @@
+import React from 'react';
+import { motion } from 'motion/react';
+import data from '../data.json';
+import { 
+  Mail, 
+  Linkedin, 
+  Github, 
+  Twitter, 
+  ExternalLink, 
+  Mic, 
+  MessageCircle,
+  Sparkles 
+} from 'lucide-react';
+
+export const Home: React.FC = () => {
+  const { personalInfo } = data;
+
+  const contactLinks = [
+    { icon: <Mail size={20} />, label: personalInfo.email, href: `mailto:${personalInfo.email}` },
+    { icon: <Linkedin size={20} />, label: 'LinkedIn', href: personalInfo.linkedin },
+    { icon: <ExternalLink size={20} />, label: '小红书主页', href: personalInfo.xiaohongshu },
+    { icon: <Github size={20} />, label: 'GitHub', href: personalInfo.github },
+    { icon: <Twitter size={20} />, label: 'X (Twitter)', href: personalInfo.x },
+    { icon: <Mic size={20} />, label: '小宇宙播客', href: personalInfo.podcast },
+    ...(personalInfo.jike ? [{ icon: <Sparkles size={20} />, label: '即刻', href: personalInfo.jike }] : []),
+  ];
+
+  return (
+    <div className="min-h-screen bg-paper flex flex-col items-center justify-center px-6 py-24">
+      <div className="max-w-2xl w-full">
+        {/* Personal Info */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="space-y-8"
+        >
+          <h1 className="text-6xl md:text-8xl font-serif leading-tight tracking-tight text-ink">
+            {personalInfo.name.split('/').map((part, i) => (
+              <React.Fragment key={i}>
+                {part}
+                {i < personalInfo.name.split('/').length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </h1>
+          <p className="text-xl md:text-2xl text-muted font-serif italic">
+            {personalInfo.title}
+          </p>
+          <div className="h-px w-24 bg-accent/30" />
+          <p className="text-lg md:text-xl text-ink/70 leading-relaxed font-serif">
+            这是一场跨越百年的生命实验（1996 - 2096）。点击年份展开那些被记录的瞬间，或是静待未来的留白被填满。
+          </p>
+
+          {/* 联系我 Contact Me */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="pt-8 mt-8 border-t border-ink/10"
+          >
+            <h3 className="text-xs uppercase tracking-widest text-muted font-semibold mb-6">联系我</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {contactLinks.map((link, i) => (
+                <a 
+                  key={i}
+                  href={link.href.startsWith('http') || link.href.startsWith('mailto') ? link.href : `https://${link.href}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-3 text-muted hover:text-accent transition-colors group"
+                >
+                  <span className="text-accent/80 group-hover:scale-110 transition-transform shrink-0">
+                    {link.icon}
+                  </span>
+                  <span className="text-sm font-medium truncate">{link.label}</span>
+                </a>
+              ))}
+              {personalInfo.wechatQR && (
+                <div className="group relative flex items-center gap-3 text-muted hover:text-accent transition-colors cursor-pointer">
+                  <span className="text-accent/80 group-hover:scale-110 transition-transform shrink-0">
+                    <MessageCircle size={20} />
+                  </span>
+                  <span className="text-sm font-medium">微信公众号</span>
+                  <div className="absolute left-0 bottom-full mb-3 opacity-0 group-hover:opacity-100 transition-all pointer-events-none translate-y-2 group-hover:translate-y-0 z-10">
+                    <div className="bg-white p-3 rounded-2xl shadow-xl border border-ink/10">
+                      <img 
+                        src={personalInfo.wechatQR} 
+                        alt="WeChat QR" 
+                        className="w-40 h-auto rounded-lg"
+                        referrerPolicy="no-referrer"
+                      />
+                      <p className="text-ink text-xs text-center mt-2 font-sans">扫码关注公众号</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
