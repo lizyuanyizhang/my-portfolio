@@ -32,3 +32,21 @@ export interface Business {
   description: string;
   icon: string;
 }
+
+/** 语音录制记录（Supabase voices 表） */
+export interface Voice {
+  id: string;
+  created_at: string;
+  storage_path: string;
+  duration_seconds?: number;
+  caption?: string;
+  /** 公开可访问的音频 URL，由 Storage 生成 */
+  url?: string;
+}
+
+/** 文字留言（Supabase messages 表） */
+export interface TextMessage {
+  id: string;
+  content: string;
+  created_at: string;
+}

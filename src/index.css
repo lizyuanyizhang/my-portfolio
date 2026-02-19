@@ -9,6 +9,12 @@
   --color-ink: #1a1a1a;
   --color-muted: #666666;
   --color-accent: #5A5A40; /* Olive */
+  
+  /* iMessage-inspired / 参考 iMessage 的细腻配色 */
+  --color-bubble-sent: #007AFF;        /* iOS blue, 发出的消息气泡 */
+  --color-bubble-sent-light: #5AC8FA;  /* 高亮/渐变用 */
+  --color-bubble-surface: #E8E8ED;     /* 输入区、浅灰气泡 */
+  --color-bubble-surface-hover: #D1D1D6;
 }
 
 @layer base {

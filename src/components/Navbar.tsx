@@ -71,7 +71,7 @@ export const Navbar: React.FC = () => {
             时间轴
           </Link>
           <Link to="/audio" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/audio' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
-            声音
+            留言
           </Link>
           <Link to="/video" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/video' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             影像

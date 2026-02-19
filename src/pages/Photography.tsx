@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import data from '../data.json';
-import { LayoutGrid, Rows3 } from 'lucide-react';
+import { LayoutGrid, FolderOpen } from 'lucide-react';
 import type { Photo } from '../types';
 
-type LayoutMode = 'grid' | 'waterfall';
+type LayoutMode = 'grid' | 'collection';
+
+/** 按地点将照片分组，无地点的归入「其他」 */
+function groupByLocation(photos: Photo[]): [string, Photo[]][] {
+  const map = new Map<string, Photo[]>();
+  for (const p of photos) {
+    const key = p.location?.trim() || '其他';
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(p);
+  }
+  return Array.from(map.entries()).sort(([a], [b]) => (a === '其他' ? 1 : b === '其他' ? -1 : a.localeCompare(b)));
+}
 
 export const Photography: React.FC = () => {
   const photos = (data as { photos: Photo[] }).photos;
   const [layout, setLayout] = useState<LayoutMode>('grid');
+  const collections = useMemo(() => groupByLocation(photos), [photos]);
 
   return (
     <div className="pt-24 pb-24 min-h-screen bg-paper">
@@ -18,17 +30,13 @@ export const Photography: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* 头部：标题 + 副标题 左侧，布局切换 右侧 —— 参考摄影画廊极简布局 */}
-          <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-serif text-ink mb-3">摄影</h1>
-              <div className="h-px w-16 bg-accent/20 mb-4" />
-              <p className="text-muted font-serif italic text-base max-w-md">
-                用镜头捕捉的瞬间，留住值得回望的风景。
-              </p>
-            </div>
-            {/* 布局切换：图标优先，低调不抢戏 */}
-            <div className="flex rounded-lg border border-ink/10 p-0.5 shrink-0" aria-label="切换显示布局">
+          {/* 头部：标题与副标题合并为一行 */}
+          <header className="flex flex-col items-center text-center mb-12">
+            <h1 className="text-xl md:text-2xl font-serif text-ink max-w-2xl mb-6">
+              摄影 · 我拍的一些照片集合，记录驻足过的瞬间。
+            </h1>
+            {/* 布局切换 */}
+            <div className="flex rounded-lg border border-ink/10 p-0.5" aria-label="切换显示布局">
               <button
                 onClick={() => setLayout('grid')}
                 title="网格"
@@ -39,13 +47,13 @@ export const Photography: React.FC = () => {
                 <LayoutGrid size={18} strokeWidth={1.5} />
               </button>
               <button
-                onClick={() => setLayout('waterfall')}
-                title="瀑布流"
+                onClick={() => setLayout('collection')}
+                title="合集"
                 className={`p-2.5 rounded-md transition-all ${
-                  layout === 'waterfall' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
+                  layout === 'collection' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
                 }`}
               >
-                <Rows3 size={18} strokeWidth={1.5} />
+                <FolderOpen size={18} strokeWidth={1.5} />
               </button>
             </div>
           </header>
@@ -56,15 +64,24 @@ export const Photography: React.FC = () => {
               暂无作品。前往 img.scdn.io 上传图片，将链接添加到 data.json 的 photos 数组即可展示。
             </p>
           ) : layout === 'grid' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {photos.map((photo, index) => (
                 <PhotoCard key={photo.id} photo={photo} index={index} />
               ))}
             </div>
           ) : (
-            <div className="photo-waterfall">
-              {photos.map((photo, index) => (
-                <PhotoCard key={photo.id} photo={photo} index={index} variant="waterfall" />
+            <div className="space-y-12">
+              {collections.map(([location, items]) => (
+                <section key={location}>
+                  <h2 className="text-lg font-serif text-ink mb-4 pb-2 border-b border-ink/10">
+                    {location}
+                  </h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+                    {items.map((photo, index) => (
+                      <PhotoCard key={photo.id} photo={photo} index={index} hideLocation />
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
           )}
@@ -74,11 +91,7 @@ export const Photography: React.FC = () => {
   );
 };
 
-const PhotoCard: React.FC<{ photo: Photo; index: number; variant?: 'grid' | 'waterfall' }> = ({
-  photo,
-  index,
-  variant = 'grid',
-}) => {
+const PhotoCard: React.FC<{ photo: Photo; index: number; hideLocation?: boolean }> = ({ photo, index, hideLocation }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -86,28 +99,21 @@ const PhotoCard: React.FC<{ photo: Photo; index: number; variant?: 'grid' | 'wat
       transition={{ duration: 0.4, delay: index * 0.05 }}
       className="group cursor-default"
     >
-      <div
-        className={`overflow-hidden rounded-2xl bg-muted/10 border border-ink/5 ${
-          variant === 'waterfall' ? '' : 'aspect-[3/4]'
-        }`}
-      >
+      <div className="overflow-hidden rounded-xl bg-muted/10 border border-ink/5 aspect-square">
         <img
           src={photo.url}
           alt={photo.caption}
-          className={`w-full transition-transform duration-700 group-hover:scale-105 ${
-            variant === 'waterfall' ? 'block' : 'h-full object-cover'
-          }`}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           referrerPolicy="no-referrer"
           loading="lazy"
         />
       </div>
-      <div className="mt-3 px-1">
-        <p className="font-serif text-ink font-medium">{photo.caption}</p>
-        {photo.location && (
-          <p className="text-xs text-muted mt-0.5 uppercase tracking-wider">{photo.location}</p>
-        )}
-        {photo.date && (
-          <p className="text-xs text-muted mt-0.5">{photo.date}</p>
+      <div className="mt-1.5 px-0.5">
+        <p className="font-serif text-ink font-medium text-xs leading-tight line-clamp-2">{photo.caption}</p>
+        {(hideLocation ? photo.date : (photo.location || photo.date)) && (
+          <p className="text-[10px] text-muted mt-0.5 truncate">
+            {hideLocation ? photo.date : [photo.location, photo.date].filter(Boolean).join(' · ')}
+          </p>
         )}
       </div>
     </motion.div>

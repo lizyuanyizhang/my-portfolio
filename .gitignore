@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# 本地 Supabase 配置笔记，可能包含项目信息，不提交
+SUPABASE_SETUP.md
