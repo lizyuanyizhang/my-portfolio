@@ -20,7 +20,8 @@ module.exports = {
       catalog: false,
       frontMatter: {
         enable: true,
-        include: ['title', 'date', 'updated', 'description', 'categories', 'tags'],
+        /* include 为空则导出全部 Notion 属性，便于调试分类列 */
+        include: [],
         timeFormat: true,
       },
     },

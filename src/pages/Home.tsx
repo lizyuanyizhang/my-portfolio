@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -15,6 +15,7 @@ import {
 export const Home: React.FC = () => {
   const { data } = useLanguage();
   const { personalInfo, ui } = data;
+  const [wechatQRVisible, setWechatQRVisible] = useState(false);
 
   const contactLinks = [
     { icon: <Mail size={20} />, label: personalInfo.email, href: `mailto:${personalInfo.email}` },
@@ -27,7 +28,7 @@ export const Home: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-paper flex flex-col items-center justify-center px-6 py-24">
+    <div className="min-h-screen bg-paper flex flex-col items-center justify-center px-4 sm:px-6 py-24">
       <div className="max-w-2xl w-full">
         {/* Personal Info */}
         <motion.div 
@@ -73,19 +74,20 @@ export const Home: React.FC = () => {
                 </a>
               ))}
               {personalInfo.wechatQR && (
-                <div className="group relative flex items-center gap-3 text-muted hover:text-accent transition-colors cursor-pointer">
+                <div
+                  className="group relative flex items-center gap-3 text-muted hover:text-accent transition-colors cursor-pointer min-h-[44px] items-center"
+                  onClick={() => setWechatQRVisible((v) => !v)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && setWechatQRVisible((v) => !v)}
+                >
                   <span className="text-accent/80 group-hover:scale-110 transition-transform shrink-0">
                     <MessageCircle size={20} />
                   </span>
                   <span className="text-sm font-medium">{ui.wechat}</span>
-                  <div className="absolute left-0 bottom-full mb-3 opacity-0 group-hover:opacity-100 transition-all pointer-events-none translate-y-2 group-hover:translate-y-0 z-10">
-                    <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10">
-                      <img 
-                        src={personalInfo.wechatQR} 
-                        alt="WeChat QR" 
-                        className="w-64 h-auto rounded-lg"
-                        referrerPolicy="no-referrer"
-                      />
+                  <div className={`absolute left-0 bottom-full mb-3 transition-all translate-y-2 z-10 md:group-hover:translate-y-0 ${wechatQRVisible ? 'opacity-100 translate-y-0' : 'opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0'}`}>
+                    <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10 w-48 sm:w-64">
+                      <img src={personalInfo.wechatQR} alt="WeChat QR" className="w-full h-auto rounded-lg" referrerPolicy="no-referrer" />
                       <p className="text-ink text-xs text-center mt-2 font-sans">{ui.scanQR}</p>
                     </div>
                   </div>

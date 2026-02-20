@@ -27,8 +27,12 @@ function parseFrontMatter(content) {
   if (!match) return { frontMatter: {}, body: content };
   const frontMatter = {};
   match[1].split('\n').forEach((line) => {
-    const m = line.match(/^(\w+):\s*(.*)$/);
-    if (m) frontMatter[m[1]] = m[2]?.replace(/^["']|["']$/g, '').trim();
+    /* 支持中文等属性名（如 Notion 的「选择」） */
+    const m = line.match(/^([^:]+):\s*(.*)$/);
+    if (m) {
+      const key = m[1].trim();
+      frontMatter[key] = m[2]?.replace(/^["']|["']$/g, '').trim();
+    }
   });
   return { frontMatter, body: match[2] };
 }
@@ -63,8 +67,24 @@ function main() {
 
     const title = frontMatter.title || path.basename(file, '.md');
     const date = formatDate(frontMatter.date || frontMatter.updated);
-    const category = frontMatter.categories || frontMatter.tags || '随笔';
-    const cat = Array.isArray(category) ? category[0] : category;
+    /* Notion 分类：优先 选择/分类/categories/tags；否则从所有属性中查找类分类值（Notion API 用 UUID 作 key） */
+    const knownKeys = ['title', 'date', 'updated', 'description', 'urlname', 'cover'];
+    const knownCategories = ['旅行感受', '技术思考', '工作思考', '影评', '书评', '随笔'];
+    let categoryRaw =
+      frontMatter['选择'] ?? frontMatter['分类'] ?? frontMatter.categories ?? frontMatter.tags;
+    if (!categoryRaw) {
+      const looksLikeDate = (str) => /^\d{4}-\d{2}-\d{2}/.test(String(str));
+      for (const key of Object.keys(frontMatter)) {
+        if (knownKeys.includes(key)) continue;
+        const v = frontMatter[key];
+        const s = Array.isArray(v) ? v[0] : (typeof v === 'string' ? v : '');
+        if (s && !looksLikeDate(s) && (knownCategories.includes(s) || (s.length >= 2 && s.length <= 20))) {
+          categoryRaw = s;
+          break;
+        }
+      }
+    }
+    const cat = Array.isArray(categoryRaw) ? (categoryRaw[0] || '随笔') : (typeof categoryRaw === 'string' ? categoryRaw : '随笔') || '随笔';
     const desc = frontMatter.description || '';
 
     const plainBody = stripMarkdown(body);

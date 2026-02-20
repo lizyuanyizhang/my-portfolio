@@ -24,21 +24,20 @@ export const Photography: React.FC = () => {
   const collections = useMemo(() => groupByLocation(photos), [photos]);
 
   return (
-    <div className="pt-24 pb-24 min-h-screen bg-paper">
-      <div className="px-6 md:px-10">
+    <div className="pt-24 md:pt-28 pb-24 min-h-screen bg-paper">
+      <div className="px-4 sm:px-6 md:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* 头部：布局切换在左，标题在右，水平对齐 */}
-          <header className="flex flex-row items-center justify-between gap-6 mb-12">
-            {/* 布局切换：左对齐 */}
-            <div className="flex rounded-lg border border-ink/10 p-0.5 shrink-0" aria-label="切换显示布局">
+          {/* 小屏垂直堆叠，大屏水平对齐 */}
+          <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6 mb-10 md:mb-12">
+            <div className="flex rounded-lg border border-ink/10 p-0.5 shrink-0 self-start" aria-label="切换显示布局">
               <button
                 onClick={() => setLayout('grid')}
                 title="网格"
-                className={`p-2.5 rounded-md transition-all ${
+                className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md transition-all ${
                   layout === 'grid' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
                 }`}
               >
@@ -47,15 +46,14 @@ export const Photography: React.FC = () => {
               <button
                 onClick={() => setLayout('collection')}
                 title="合集"
-                className={`p-2.5 rounded-md transition-all ${
+                className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md transition-all ${
                   layout === 'collection' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
                 }`}
               >
                 <FolderOpen size={18} strokeWidth={1.5} />
               </button>
             </div>
-            {/* 标题：右对齐，与切换按钮水平对齐 */}
-            <h1 className="text-xl md:text-2xl font-serif text-ink text-left flex-1">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-serif text-ink text-left flex-1">
               摄影 · 我拍的一些照片集合，记录驻足过的瞬间。
             </h1>
           </header>

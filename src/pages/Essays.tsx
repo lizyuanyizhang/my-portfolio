@@ -5,7 +5,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import type { Essay } from '../types';
 
-const CATEGORIES = ['随笔', '书评', '影评', '旅行日记', '技术思考', '工作感悟'] as const;
+/** 与 Notion「选择」列一致的固定分类，按菜单显示顺序 */
+const ESSAY_CATEGORIES = ['旅行感受', '技术思考', '工作思考', '影评', '书评', '随笔'] as const;
 
 export const Essays: React.FC = () => {
   const { data } = useLanguage();
@@ -18,21 +19,20 @@ export const Essays: React.FC = () => {
   }, [essays, activeCategory]);
 
   return (
-    <div className="essays-page pt-20 pb-24 min-h-screen">
-      {/* 分类菜单 + 副标题：水平对齐，副标题在最右，等宽字体 */}
-      <div className="px-6 md:px-10 w-full">
+    <div className="essays-page pt-24 md:pt-28 pb-24 min-h-screen">
+      <div className="px-4 sm:px-6 md:px-10 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-wrap items-center justify-between gap-4 mb-8 w-full"
+          className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4 mb-8 w-full"
         >
           <div className="flex flex-wrap gap-2 justify-start items-center">
-            {['全部', ...CATEGORIES].map((cat) => (
+            {['全部', ...ESSAY_CATEGORIES].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`pl-0 pr-4 py-2.5 rounded-full text-sm font-medium transition-all text-left font-mono ${
+                className={`pl-0 pr-4 py-2.5 min-h-[44px] flex items-center rounded-full text-sm font-medium transition-all text-left font-mono ${
                   activeCategory === cat
                     ? 'bg-ink text-[#f8f8f4]'
                     : 'bg-ink/5 text-[#444] hover:bg-ink/10 hover:text-ink'
@@ -48,8 +48,7 @@ export const Essays: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* 文章列表：紧凑排版，一页约展示 4 篇 */}
-      <div className="px-6 md:px-10">
+      <div className="px-4 sm:px-6 md:px-10">
         <div className="max-w-[42rem]">
           <div className="space-y-0 border-t border-ink/10 text-left">
             {filteredEssays.length === 0 ? (
@@ -61,34 +60,22 @@ export const Essays: React.FC = () => {
                 <Link
                   key={essay.id}
                   to={`/essays/${essay.id}`}
-                  className="group block py-5 border-b border-ink/10 last:border-0 text-left"
+                  className="group block py-5 border-b border-ink/10 last:border-0 text-left min-h-[44px]"
                 >
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <div
-                        className={`flex items-baseline gap-4 mb-1.5 ${
-                          activeCategory === '全部'
-                            ? 'grid grid-cols-3'
-                            : 'justify-between'
-                        }`}
-                      >
+                      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-1.5">
                         <span className="text-xs font-mono text-[#444]">{essay.date}</span>
-                        <span
-                          className={`text-xs font-mono text-[#444] shrink-0 ${
-                            activeCategory === '全部' ? 'text-center col-start-2' : ''
-                          }`}
-                        >
-                          {essay.category || '随笔'}
-                        </span>
+                        <span className="text-xs font-mono text-[#444]">{essay.category || '随笔'}</span>
                       </div>
-                      <h3 className="text-lg md:text-xl font-mono font-semibold text-ink mb-2 group-hover:text-accent transition-colors">
+                      <h3 className="text-base sm:text-lg md:text-xl font-mono font-semibold text-ink mb-2 group-hover:text-accent transition-colors">
                         {essay.title}
                       </h3>
                       <p className="text-[#444] font-mono text-sm leading-[1.6] line-clamp-2">
                         {essay.excerpt}
                       </p>
                     </div>
-                    <span className="flex items-center gap-2 text-xs font-mono font-medium text-[#444] group-hover:text-accent group-hover:translate-x-2 transition-all shrink-0 mt-1 md:mt-0">
+                    <span className="flex items-center gap-2 text-xs font-mono font-medium text-[#444] group-hover:text-accent group-hover:translate-x-2 transition-all shrink-0 mt-1 md:mt-0 min-h-[44px] items-center">
                       {(data as { ui?: { essays?: { readMore?: string } } }).ui?.essays?.readMore ?? '阅读全文'} <ArrowRight size={12} />
                     </span>
                   </div>

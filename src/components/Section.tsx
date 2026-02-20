@@ -14,7 +14,7 @@ export const Section: React.FC<SectionProps> = ({ id, title, subtitle, children,
   return (
     <section 
       id={id} 
-      className={`py-24 px-6 ${dark ? 'bg-ink text-paper' : 'bg-paper text-ink'} ${className}`}
+      className={`py-16 md:py-24 px-4 sm:px-6 md:px-10 ${dark ? 'bg-ink text-paper' : 'bg-paper text-ink'} ${className}`}
     >
       <div className="max-w-6xl mx-auto">
         {(title || subtitle) && (

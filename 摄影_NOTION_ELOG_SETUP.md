@@ -91,16 +91,17 @@ npm run sync                 # 同时执行随笔 + 摄影
 - 在「图片」列上传文件，或在行内子页面插入图片
 - 确保图片已成功上传（非占位或断链）
 
-### Q：图片 URL 是 Notion 的，会失效吗？
+### Q：图片不显示 / 灰框 / 链接失效
 
-- Elog 开启了 image 下载，会将图片保存到 `public/images/elog/`，脚本会使用本地路径
-- 若前端仍显示 Notion 直链，检查 elog-photos.config.cjs 中 `image.enable: true`
+- **原因**：Notion 图片为 S3 临时链接（约 1 小时过期），直接写入会失效。
+- **方案**：`notion-to-photos.cjs` 会自动将 Notion 图片下载到 `public/images/elog/`，并使用本地路径 `/images/elog/xxx` 写入 data.zh.json。
+- **操作**：执行完整同步 `npm run sync`（包含 sync:notion:photos 获取新链接 + sync:photos 下载并写入），图片会持久化。
 
-### Q：仅更新摄影，不碰随笔
+### Q：之前同步的照片变少或消失
 
-```bash
-npm run sync:notion:photos && npm run sync:photos
-```
+- 每次 `sync:photos` 会用 Notion 摄影数据库**完全替换** data.zh.json 的 photos 数组。
+- 若 Notion 中删除了条目，或数据库只剩部分照片，同步后数量会减少。
+- 若图片显示灰框，说明 URL 已过期，需重新执行 `npm run sync` 获取新链接并下载。
 
 ---
 

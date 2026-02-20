@@ -34,72 +34,53 @@ export const Navbar: React.FC = () => {
   const isEssaysPage = location.pathname.startsWith('/essays');
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-paper/80 backdrop-blur-md border-b border-ink/5">
-      <div className={`w-full px-6 md:px-10 flex items-center justify-between gap-4 ${isEssaysPage ? 'h-auto py-4' : 'h-16'}`}>
-        <div className="shrink-0 flex flex-col gap-1">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-paper/80 backdrop-blur-md border-b border-ink/5 pt-[env(safe-area-inset-top)]">
+      <div className={`w-full px-4 sm:px-6 md:px-10 flex items-center justify-between gap-4 ${isEssaysPage ? 'h-auto py-4' : 'h-14 md:h-16'}`}>
+        <div className="shrink-0 flex flex-col gap-0.5">
           <Link to="/">
             <LifeTimer />
           </Link>
           <VisitorCount />
         </div>
 
+        {/* 所有屏幕：横向导航，小屏可左右滑动 */}
         <div className="flex-1 flex items-center justify-end gap-2 md:gap-6 text-sm font-medium min-w-0 overflow-x-auto">
-          <Link to="/" className={`px-3 py-2 rounded-lg transition-all duration-200 ${isHome ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+          <Link to="/" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${isHome ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.home}
           </Link>
-          <Link to="/resume" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/resume' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+          <Link to="/resume" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/resume' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.resume}
           </Link>
-          {/* 文字：若配置了 essaysExternalUrl（如 Notion+Super 站），则跳转外链；否则走站内 /essays */}
           {personalInfo.essaysExternalUrl ? (
-            <a
-              href={personalInfo.essaysExternalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-2 rounded-lg transition-all duration-200 text-muted hover:text-accent"
-            >
+            <a href={personalInfo.essaysExternalUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center text-muted hover:text-accent">
               {ui.nav.essays}
             </a>
           ) : (
-            <Link to="/essays" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/essays') ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+            <Link to="/essays" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname.startsWith('/essays') ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
               {ui.nav.essays}
             </Link>
           )}
-          <Link to="/photography" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/photography' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+          <Link to="/photography" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/photography' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.photography}
           </Link>
-          <Link to="/apps" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/apps' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+          <Link to="/apps" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/apps' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.apps}
           </Link>
-          <Link 
-            to="/timeline"
-            className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/timeline' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}
-            onClick={(e) => {
-              if (location.pathname === '/timeline') {
-                e.preventDefault();
-                scrollToCurrentYear();
-              }
-            }}
-          >
+          <Link to="/timeline" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/timeline' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`} onClick={(e) => { if (location.pathname === '/timeline') { e.preventDefault(); scrollToCurrentYear(); } }}>
             {ui.nav.timeline}
           </Link>
-          <Link to="/audio" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/audio' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+          <Link to="/audio" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/audio' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.audio}
           </Link>
-          <Link to="/video" className={`px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/video' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+          <Link to="/video" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/video' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.video}
           </Link>
-          <button
-            onClick={OPEN_PALETTE}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-muted hover:text-accent hover:bg-ink/5 transition-all text-xs font-medium border-l border-ink/10 ml-1"
-            title={(data as { ui?: { shortcuts?: string } }).ui?.shortcuts}
-            aria-label="快捷键搜索"
-          >
+          <button onClick={OPEN_PALETTE} className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-muted hover:text-accent hover:bg-ink/5 transition-all text-xs font-medium border-l border-ink/10 ml-1 min-h-[44px]" title={(data as { ui?: { shortcuts?: string } }).ui?.shortcuts} aria-label="快捷键搜索">
             <Search size={14} className="shrink-0" />
             <span className="hidden md:inline">{(data as { ui?: { shortcuts?: string } }).ui?.shortcuts ?? '按 / 或 ⌘K 搜索 · H 首页 N 时间轴 R 随机'}</span>
             <span className="md:hidden font-mono">/</span>
           </button>
-          <div className="border-l border-ink/15 pl-2">
+          <div className="shrink-0 border-l border-ink/15 pl-2">
             <LocationClock />
           </div>
         </div>

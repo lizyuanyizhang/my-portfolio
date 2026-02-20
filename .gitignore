@@ -12,7 +12,7 @@ content/elog-posts/
 content/elog-photos/
 elog.cache.json
 elog-photos.cache.json
-public/images/elog/
+# public/images/elog/ 已移除：摄影同步会下载 Notion 图片到此目录，需提交以部署
 
 # 本地 Supabase 配置笔记，可能包含项目信息，不提交
 SUPABASE_SETUP.md

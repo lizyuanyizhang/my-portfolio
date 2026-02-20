@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, Linkedin, ExternalLink, Github, Twitter, MessageCircle, Mic } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export const Footer: React.FC = () => {
   const { data } = useLanguage();
   const { personalInfo } = data as { personalInfo: any };
+  const [wechatQRVisible, setWechatQRVisible] = useState(false);
   return (
-    <footer className="bg-ink text-paper py-24 px-6 border-t border-paper/10">
+    <footer className="bg-ink text-paper py-16 md:py-24 px-4 sm:px-6 md:px-10 border-t border-paper/10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
           <h3 className="text-3xl font-serif mb-8">保持联系</h3>
@@ -46,15 +47,22 @@ export const Footer: React.FC = () => {
               </a>
             )}
             {personalInfo.wechatQR && (
-              <div className="group relative flex items-center gap-3 text-paper/80 hover:text-paper transition-colors cursor-pointer">
+              <div
+                className="group relative flex items-center gap-3 text-paper/80 hover:text-paper transition-colors cursor-pointer min-h-[44px] items-center"
+                onClick={() => setWechatQRVisible((v) => !v)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && setWechatQRVisible((v) => !v)}
+              >
                 <MessageCircle size={18} />
                 <span>微信公众号</span>
-                <div className="absolute left-0 bottom-full mb-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  <div className="bg-white p-4 rounded-xl shadow-2xl">
-                    <img 
-                      src={personalInfo.wechatQR} 
-                      alt="WeChat QR" 
-                      className="w-64 h-auto rounded-lg"
+                {/* 桌面端 hover 显示，移动端点击显示 */}
+                <div className={`absolute left-0 bottom-full mb-4 transition-opacity pointer-events-none md:pointer-events-auto md:group-hover:opacity-100 ${wechatQRVisible ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'}`}>
+                  <div className="bg-white p-4 rounded-xl shadow-2xl w-48 sm:w-64">
+                    <img
+                      src={personalInfo.wechatQR}
+                      alt="WeChat QR"
+                      className="w-full h-auto rounded-lg"
                       referrerPolicy="no-referrer"
                     />
                     <p className="text-ink text-[10px] text-center mt-2 font-sans">扫码关注公众号</p>

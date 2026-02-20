@@ -27,7 +27,7 @@ Notion 随笔数据库 → elog sync → content/elog-posts/*.md
 3. 建议列：
    - **标题** (title) - 默认有
    - **日期** (date) - Date 类型
-   - **分类** (categories) - Select，如：随笔、书评、影评
+   - **选择** - Select 类型，选项须与站点菜单一致：旅行感受、技术思考、工作思考、影评、书评、随笔（顺序可自定义）
    - **描述** (description) - 用作摘要，可选
 4. 在数据库中新建页面，像文档一样写正文
 5. **重要**：把该数据库分享给 Integration（下一步创建）
@@ -120,6 +120,10 @@ npm run sync
 - **标题**：Notion 数据库的**第一列**必须是「标题」(Title) 类型，且每行都要有内容
 - **正文**：点击每行进入子页面，在页面中写正文；空页面会被跳过
 - 可新建一个「Table - Full page」数据库，默认第一列即为标题类型
+
+### Q：菜单栏分类与 Notion「选择」列不一致
+
+Notion API 返回属性时使用 UUID 作为 key，不是列名。因此 `elog.config.cjs` 中需设置 `include: []`（空数组）以导出全部属性。`notion-to-essays.cjs` 会自动从导出的 front matter 中识别分类值（如 随笔、技术思考、书评 等）。菜单栏会从 essays 中动态提取分类。
 
 ### Q：想只同步部分文章（如 status=已发布）
 
