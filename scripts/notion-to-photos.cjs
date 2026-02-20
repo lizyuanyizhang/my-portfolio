@@ -152,7 +152,9 @@ async function main() {
 
     if (url.startsWith('/') && !url.startsWith('/images/')) {
       url = '/images/elog' + url;
-    } else if (isNotionTempUrl(url)) {
+    }
+    /* 严禁将 Notion S3 临时链接写入 data，避免 Secret 泄露到 Git */
+    if (isNotionTempUrl(url)) {
       /* 用 Notion 文档 ID 作文件名，保证同一张图每次同步用同一文件，不重复下载 */
       const docId = (frontMatter.urlname || frontMatter.id || file).replace(/[^a-zA-Z0-9-]/g, '');
       const baseName = `photo-${docId || i + 1}`;
@@ -164,6 +166,11 @@ async function main() {
         console.warn(`下载图片失败 ${file}，跳过:`, e.message, hint);
         continue;
       }
+    }
+    /* 二次检查：绝不写入含 AWS 凭证的链接到仓库 */
+    if (isNotionTempUrl(url)) {
+      console.warn(`跳过 ${file}：禁止将 Notion 临时链接写入 data（避免 Secret 泄露）`);
+      continue;
     }
 
     photos.push({

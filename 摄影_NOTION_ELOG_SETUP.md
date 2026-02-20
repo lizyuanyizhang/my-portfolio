@@ -97,6 +97,13 @@ npm run sync                 # 同时执行随笔 + 摄影
 - **方案**：`notion-to-photos.cjs` 会自动将 Notion 图片下载到 `public/images/elog/`，并使用本地路径 `/images/elog/xxx` 写入 data.zh.json。
 - **操作**：执行完整同步 `npm run sync`（包含 sync:notion:photos 获取新链接 + sync:photos 下载并写入），图片会持久化。
 
+### Q：GitHub 提示 AWS Secret 泄露（Secret scanning alerts）
+
+- **原因**：此前曾把 Notion 的 S3 临时图片链接写入 data.zh.json，其中包含 AWS 临时凭证。
+- **说明**：该凭证为 Notion 的临时访问密钥，约 1 小时后自动失效，并非你的 AWS 账号密钥。
+- **处理**：在 GitHub → Security → Secret scanning → 打开对应告警 → 选择 **Mark as revoked** 或 **Resolve**。当前脚本已改为仅写入本地路径，不再写入 Notion 链接。
+- **预防**：`notion-to-photos.cjs` 已加入防护，禁止将任何 Notion S3 链接写入输出。
+
 ### Q：之前同步的照片变少或消失
 
 - 每次 `sync:photos` 会用 Notion 摄影数据库**完全替换** data.zh.json 的 photos 数组。
