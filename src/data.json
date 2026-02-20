@@ -31,6 +31,18 @@
       "builtWith": ["Cursor", "React", "Vite"]
     }
   ],
+  "videos": [
+    {
+      "id": "1",
+      "title": "示例：上海街头的一天",
+      "description": "用手机记录的 citywalk 碎片，探索城市的角落。",
+      "cover": "https://img.cdn1.vip/i/6997080b2d655_1771505675.webp",
+      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "duration": "3:42",
+      "tags": ["记录", "城市"],
+      "date": "2024-12"
+    }
+  ],
   "essays": [
     {
       "id": "1",

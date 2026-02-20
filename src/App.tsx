@@ -1,5 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { EasterEggProvider } from './context/EasterEggContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { Navbar } from './components/Navbar';
+import { TranslationButton } from './components/TranslationButton';
+import { ChatWidget } from './components/ChatWidget';
+import { KeyboardShortcuts } from './components/KeyboardShortcuts';
+import { EasterEggCharacter } from './components/EasterEggCharacter';
+import { EasterEggToast } from './components/EasterEggToast';
+import { CursorGlow } from './components/CursorGlow';
 import { Home } from './pages/Home';
 import { Timeline } from './pages/Timeline';
 import { Resume } from './pages/Resume';
@@ -13,9 +21,11 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   return (
-    <Router basename={import.meta.env.BASE_URL}>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
+    <EasterEggProvider>
+      <Router basename={import.meta.env.BASE_URL}>
+        <LanguageProvider>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
         <main className="flex-grow">
           <AnimatePresence mode="wait">
             <Routes>
@@ -84,7 +94,15 @@ export default function App() {
             </Routes>
           </AnimatePresence>
         </main>
+        <EasterEggCharacter />
+        <EasterEggToast />
+        <CursorGlow />
+        <TranslationButton />
+        <ChatWidget />
+        <KeyboardShortcuts />
       </div>
+        </LanguageProvider>
     </Router>
+    </EasterEggProvider>
   );
 }

@@ -1,0 +1,123 @@
+{
+  "personalInfo": {
+    "name": "张苑逸 LIZ ZHANG",
+    "title": "headhunter / 未来摄影师 / 写作者 / vibe coder / 终身学习者",
+    "language": "Mandarin / English / A little bit German",
+    "bio": "探索科技与人文的交汇点。热衷于通过代码构建有温度的数字体验，通过镜头捕捉生活中的宁静瞬间。",
+    "email": "yuanyizhang2021@gmail.com",
+    "linkedin": "linkedin.com/in/yuan-zhang-691076219/?skipRedirect=true",
+    "xiaohongshu": "https://xhslink.com/m/5PxwMvQbEJ0",
+    "github": "https://github.com/lizyuanyizhang",
+    "x": "https://x.com/yuanyi_zha68199",
+    "podcast": "https://www.xiaoyuzhoufm.com/podcast/691ee7cee8903cc6dbd7f0f6",
+    "jike": "https://okjk.co/hI5AlS",
+    "wechatQR": "/images/wechat_qr.png",
+    "location": "上海, 中国",
+    "essaysExternalUrl": "https://yuanyizhang.super.site/"
+  },
+  "projects": [
+    {
+      "id": "1",
+      "title": "新年祝福卡片生成器",
+      "description": "接入大模型api去优化祝福词的卡片生成器。",
+      "image": "/images/projects/newyear-card.png",
+      "tags": ["React", "新春贺卡", "AI", "千问"],
+      "date": "2024",
+      "link": "https://newyear-card-generator-55mu.vercel.app/",
+      "builtWith": ["Cursor", "React", "Vite"]
+    }
+  ],
+  "videos": [
+    {
+      "id": "1",
+      "title": "示例：上海街头的一天",
+      "description": "用手机记录的 citywalk 碎片，探索城市的角落。",
+      "cover": "https://img.cdn1.vip/i/6997080b2d655_1771505675.webp",
+      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "duration": "3:42",
+      "tags": ["记录", "城市"],
+      "date": "2024-12"
+    }
+  ],
+  "essays": [
+    {
+      "id": "1",
+      "title": "关于数字时代的宁静",
+      "excerpt": "在这个信息爆炸的时代，我们如何寻找属于自己的精神角落？探讨极简主义在数字生活中的应用。",
+      "date": "2024-01-15",
+      "category": "随笔",
+      "content": "这是一场关于数字极简主义的思考。在这个信息爆炸的时代，我们如何寻找属于自己的精神角落？\n\n或许，答案就藏在每一次有意识的「断连」之中。关掉通知，放下手机，让注意力回归当下。\n\n极简主义在数字生活中，不是放弃技术，而是更清醒地使用它。"
+    },
+    {
+      "id": "2",
+      "title": "《禅与摩托车维修艺术》读后感",
+      "excerpt": "一本关于人生哲学与技艺追求的神作。在旅途中思考「良质」的本质。",
+      "date": "2024-03-20",
+      "category": "书评",
+      "content": "罗伯特·波西格的这本书，表面是父子骑摩托车横跨美国的故事，实则是一场关于「良质」(Quality) 的哲学追问。\n\n何为良质？它存在于主观与客观之外，是我们在认真做事时能感知到的那种「对」的感觉。\n\n这本书陪伴我度过了许多思考的夜晚。推荐给每一个在技艺与人生之间寻找平衡的人。"
+    }
+  ],
+  "photos": [
+    { "id": "1", "url": "https://img.cdn1.vip/i/6997080b2d655_1771505675.webp", "caption": "我的数字头像", "location": "苏州", "date": "2026-02-19" },
+    { "id": "2", "url": "https://picsum.photos/seed/photo2/800/1200", "caption": "雨后的静谧", "location": "京都", "date": "2024-03" },
+    { "id": "3", "url": "https://picsum.photos/seed/photo3/1200/800", "caption": "光影的几何", "location": "伦敦", "date": "2024-05" }
+  ],
+  "businesses": [{ "title": "品牌视觉设计", "description": "为初创企业提供从标志到整体视觉系统的定制化设计服务。", "icon": "Palette" }],
+  "aesthetics": ["极简主义 (Minimalism)", "侘寂美学 (Wabi-sabi)", "包豪斯风格 (Bauhaus)"],
+  "interests": ["胶片摄影", "黑胶唱片收藏", "徒步旅行"],
+  "timeline": [
+    {
+      "year": "1996",
+      "location": "中国泸州",
+      "event": "即将出生在地球，将自己在地球上的足迹从-1岁开始计算",
+      "fulfillment": 100,
+      "portfolio": { "photos": [], "essays": [], "projects": [] },
+      "influences": []
+    },
+    {
+      "year": "2024",
+      "location": "上海",
+      "event": "开始探索 Vibe Coding",
+      "fulfillment": 85,
+      "portfolio": { "photos": ["/images/photos/photo1.jpg"], "essays": ["1"], "projects": ["1"] },
+      "influences": [{ "type": "book", "title": "禅与摩托车维修艺术", "time": "2024 春" }]
+    },
+    {
+      "year": "未来",
+      "location": "星辰大海",
+      "event": "继续创造有温度的数字体验",
+      "fulfillment": 95,
+      "portfolio": { "photos": [], "essays": [], "projects": [] },
+      "influences": []
+    }
+  ],
+  "resume": {
+    "summary": "拥有 5 年以上跨领域经验的创意工作者。擅长将技术实现与审美表达相结合。",
+    "experience": [
+      {
+        "role": "高级创意开发者",
+        "company": "某设计工作室",
+        "period": "2021 - 至今",
+        "details": ["主导多个品牌数字化转型项目", "负责内部设计系统的搭建"]
+      }
+    ],
+    "education": [{ "degree": "计算机科学与技术 学士", "school": "某重点大学", "period": "2014 - 2018" }],
+    "skills": { "development": ["React", "TypeScript", "Node.js"], "design": ["Figma", "UI/UX", "Motion"], "languages": ["中文", "英语"] }
+  },
+  "ui": {
+    "nav": { "home": "首页", "resume": "简历", "essays": "文字", "photography": "摄影", "apps": "应用", "timeline": "时间轴", "audio": "留言", "video": "影像" },
+    "wechat": "微信公众号",
+    "xiaohongshu": "小红书主页",
+    "podcast": "小宇宙播客",
+    "jike": "即刻",
+    "scanQR": "扫码关注公众号",
+    "home": { "contact": "联系我", "lifeExperiment": "这是一场跨越百年的生命实验（1996 - 2096）。点击年份展开那些被记录的瞬间，或是静待未来的留白被填满。" },
+    "essays": { "back": "返回文字", "readMore": "阅读全文", "subtitle": "这是她曾写下过的文字，她的见闻，所思所想", "notFound": "文章未找到" },
+    "visitor": "已经有 {count} 个人来过这里",
+    "lifeTimerName": "张苑逸",
+    "lifeTimerSuffix": "已经在地球生活了",
+    "lifeTimerUnits": ["年","月","天","时","分","秒"],
+    "noData": "暂无数据",
+    "shortcuts": "按 / 或 ⌘K 搜索 · H 首页 N 时间轴 R 随机"
+  }
+}

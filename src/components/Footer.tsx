@@ -1,9 +1,10 @@
 import React from 'react';
 import { Mail, Linkedin, ExternalLink, Github, Twitter, MessageCircle, Mic } from 'lucide-react';
-import data from '../data.json';
+import { useLanguage } from '../context/LanguageContext';
 
 export const Footer: React.FC = () => {
-  const { personalInfo } = data as any;
+  const { data } = useLanguage();
+  const { personalInfo } = data as { personalInfo: any };
   return (
     <footer className="bg-ink text-paper py-24 px-6 border-t border-paper/10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">

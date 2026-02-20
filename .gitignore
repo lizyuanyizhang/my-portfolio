@@ -9,3 +9,6 @@ coverage/
 
 # 本地 Supabase 配置笔记，可能包含项目信息，不提交
 SUPABASE_SETUP.md
+
+# Supabase CLI 本地临时文件，含项目引用与连接信息
+supabase/.temp/

@@ -1,0 +1,123 @@
+{
+  "personalInfo": {
+    "name": "张苑逸 LIZ ZHANG",
+    "title": "Headhunter / zukünftige Fotografin / Autorin / vibe coder / lebenslange Lernerin",
+    "language": "Mandarin / Englisch / ein bisschen Deutsch",
+    "bio": "Erkundung der Schnittstelle von Technologie und Menschlichkeit. Leidenschaftlich für digitale Erlebnisse mit Code und ruhige Momente durch die Linse.",
+    "email": "yuanyizhang2021@gmail.com",
+    "linkedin": "linkedin.com/in/yuan-zhang-691076219/?skipRedirect=true",
+    "xiaohongshu": "https://xhslink.com/m/5PxwMvQbEJ0",
+    "github": "https://github.com/lizyuanyizhang",
+    "x": "https://x.com/yuanyi_zha68199",
+    "podcast": "https://www.xiaoyuzhoufm.com/podcast/691ee7cee8903cc6dbd7f0f6",
+    "jike": "https://okjk.co/hI5AlS",
+    "wechatQR": "/images/wechat_qr.png",
+    "location": "Shanghai, China",
+    "essaysExternalUrl": "https://yuanyizhang.super.site/"
+  },
+  "projects": [
+    {
+      "id": "1",
+      "title": "Neujahrsgruß-Karten-Generator",
+      "description": "Ein Kartengenerator mit LLM-API für optimierte Wünsche.",
+      "image": "/images/projects/newyear-card.png",
+      "tags": ["React", "Neujahr", "AI", "Qwen"],
+      "date": "2024",
+      "link": "https://newyear-card-generator-55mu.vercel.app/",
+      "builtWith": ["Cursor", "React", "Vite"]
+    }
+  ],
+  "videos": [
+    {
+      "id": "1",
+      "title": "Ein Tag auf Shanghais Straßen",
+      "description": "Citywalk-Aufnahmen mit dem Handy, Erkundung der Stadt.",
+      "cover": "https://img.cdn1.vip/i/6997080b2d655_1771505675.webp",
+      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "duration": "3:42",
+      "tags": ["Dokumentation", "Stadt"],
+      "date": "2024-12"
+    }
+  ],
+  "essays": [
+    {
+      "id": "1",
+      "title": "Über Ruhe im digitalen Zeitalter",
+      "excerpt": "In dieser Ära der Informationsüberflutung: Wie finden wir unsere Ecke? Minimalismus im digitalen Leben.",
+      "date": "2024-01-15",
+      "category": "Essay",
+      "content": "Eine Reflexion über digitalen Minimalismus. In dieser Ära der Informationsüberflutung: Wie finden wir unsere Ecke?\n\nVielleicht liegt die Antwort im bewussten Abschalten. Benachrichtigungen aus, Handy weg, Aufmerksamkeit zurück ins Jetzt.\n\nMinimalismus im digitalen Leben bedeutet nicht Verzicht auf Technik, sondern bewussteren Umgang."
+    },
+    {
+      "id": "2",
+      "title": "Zen und die Kunst ein Motorrad zu warten — Reflexionen",
+      "excerpt": "Ein Meisterwerk über Lebensphilosophie und Handwerk. Über Qualität auf der Reise nachdenken.",
+      "date": "2024-03-20",
+      "category": "Buchbesprechung",
+      "content": "Robert Pirsigs Buch wirkt wie eine Vater-Sohn-Motorradtour durch Amerika, ist aber eine philosophische Suche nach Qualität.\n\nWas ist Qualität? Sie existiert jenseits von subjektiv und objektiv — das Gefühl von „Richtigkeit“, wenn wir mit Sorgfalt handeln.\n\nDieses Buch begleitete viele besinnliche Nächte. Empfohlen für alle, die Balance zwischen Handwerk und Leben suchen."
+    }
+  ],
+  "photos": [
+    { "id": "1", "url": "https://img.cdn1.vip/i/6997080b2d655_1771505675.webp", "caption": "Mein digitales Avatar", "location": "Suzhou", "date": "2026-02-19" },
+    { "id": "2", "url": "https://picsum.photos/seed/photo2/800/1200", "caption": "Stille nach dem Regen", "location": "Kyoto", "date": "2024-03" },
+    { "id": "3", "url": "https://picsum.photos/seed/photo3/1200/800", "caption": "Geometrie des Lichts", "location": "London", "date": "2024-05" }
+  ],
+  "businesses": [{ "title": "Marken- und Grafikdesign", "description": "Individuelle Gestaltung von Logo bis Gesamtauftritt für Startups.", "icon": "Palette" }],
+  "aesthetics": ["Minimalismus", "Wabi-Sabi", "Bauhaus"],
+  "interests": ["Analogfotografie", "Schallplattensammlung", "Wandern"],
+  "timeline": [
+    {
+      "year": "1996",
+      "location": "Luzhou, China",
+      "event": "Balde auf der Erde geboren, Fußspuren ab -1 Jahr.",
+      "fulfillment": 100,
+      "portfolio": { "photos": [], "essays": [], "projects": [] },
+      "influences": []
+    },
+    {
+      "year": "2024",
+      "location": "Shanghai",
+      "event": "Vibe Coding erkunden",
+      "fulfillment": 85,
+      "portfolio": { "photos": ["/images/photos/photo1.jpg"], "essays": ["1"], "projects": ["1"] },
+      "influences": [{ "type": "book", "title": "Zen und die Kunst ein Motorrad zu warten", "time": "Frühjahr 2024" }]
+    },
+    {
+      "year": "Zukunft",
+      "location": "Die Weiten",
+      "event": "Weiterhin warme digitale Erlebnisse schaffen",
+      "fulfillment": 95,
+      "portfolio": { "photos": [], "essays": [], "projects": [] },
+      "influences": []
+    }
+  ],
+  "resume": {
+    "summary": "Kreative Professionelle mit 5+ Jahren Erfahrung. Verbindung von Technik und Ästhetik.",
+    "experience": [
+      {
+        "role": "Senior Creative Developer",
+        "company": "Ein Designstudio",
+        "period": "2021 - Heute",
+        "details": ["Mehrere Digitalisierungsprojekte geleitet", "Designsystem aufgebaut"]
+      }
+    ],
+    "education": [{ "degree": "B.Sc. Informatik", "school": "Eine Universität", "period": "2014 - 2018" }],
+    "skills": { "development": ["React", "TypeScript", "Node.js"], "design": ["Figma", "UI/UX", "Motion"], "languages": ["Chinesisch", "Englisch"] }
+  },
+  "ui": {
+    "nav": { "home": "Start", "resume": "Lebenslauf", "essays": "Texte", "photography": "Fotografie", "apps": "Projekte", "timeline": "Zeitachse", "audio": "Nachrichten", "video": "Videos" },
+    "wechat": "WeChat Official Account",
+    "xiaohongshu": "Xiaohongshu",
+    "podcast": "Xiaoyuzhou Podcast",
+    "jike": "Jike",
+    "scanQR": "Zum Folgen scannen",
+    "home": { "contact": "Kontakt", "lifeExperiment": "Ein hundertjähriges Lebensexperiment (1996 - 2096). Klicke auf Jahre für Momente, oder warte auf die Zukunft." },
+    "essays": { "back": "Zurück zu Texten", "readMore": "Weiterlesen", "subtitle": "Worte, die sie einst schrieb, ihre Einblicke und Gedanken.", "notFound": "Artikel nicht gefunden" },
+    "visitor": "{count} Besucher waren hier",
+    "lifeTimerName": "Liz Zhang",
+    "lifeTimerSuffix": "lebt seit",
+    "lifeTimerUnits": ["Jahren","Monaten","Tagen","Std","Min","Sek"],
+    "noData": "Keine Daten",
+    "shortcuts": "/ oder ⌘K suchen · H Start N Zeitachse R Zufällig"
+  }
+}

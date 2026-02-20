@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase, supabaseConfigStatus, VOICES_BUCKET } from '../lib/supabase';
 import type { Voice, TextMessage } from '../types';
-import { Mic, Loader2, Play, Pause, Trash2, Send } from 'lucide-react';
+import { Mic, Loader2, Play, Pause, Trash2, Send, Square } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
@@ -194,7 +194,7 @@ export const Audio: React.FC = () => {
   const hasSupabase = !!supabase;
 
   return (
-    <div className="pt-24 pb-24 px-6 md:px-10 min-h-screen bg-[#F2F2F7]">
+    <div className="pt-24 pb-24 px-6 md:px-10 min-h-screen bg-[#F2F2F7] font-serif">
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -213,7 +213,7 @@ export const Audio: React.FC = () => {
             </div>
           )}
 
-          {/* 左侧：语音留言 - iMessage 风格浮框 */}
+          {/* 左侧：语音留言 - 与 LifeTimer 同款 font-serif */}
           <section className="flex flex-col h-full">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -225,27 +225,40 @@ export const Audio: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-1 h-6 bg-[#007AFF]/60 rounded-full shrink-0" />
                   <h2 className="text-[17px] font-semibold text-ink tracking-tight">语音留言</h2>
-                  {recording && <span className="text-[12px] text-[#007AFF] font-medium">录音中，点击结束</span>}
                 </div>
                 {hasSupabase && (
-                  <button
+                  <motion.button
                     onClick={() => {
                       if (uploading) return;
                       if (recording) stopRecording();
                       else startRecording();
                     }}
                     disabled={uploading}
-                    title={recording ? '点击结束录音' : '点击开始录音'}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 shrink-0 ${
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 py-2 px-4 rounded-full text-[13px] font-medium transition-all shrink-0 hover:opacity-90"
+                    style={
                       recording
-                        ? 'bg-[#007AFF] text-white'
+                        ? { backgroundColor: '#dc2626', color: 'white' }
                         : uploading
-                          ? 'bg-black/15 text-white'
-                          : 'bg-[#007AFF]/15 text-[#007AFF] hover:bg-[#007AFF]/25 active:scale-95'
-                    }`}
+                          ? { backgroundColor: '#e5e7eb', color: '#9ca3af' }
+                          : { backgroundColor: '#1a1a1a', color: 'white' }
+                    }
+                    title={recording ? '点击结束录音' : '点击开始录音'}
                   >
-                    {uploading ? <Loader2 size={18} className="animate-spin" /> : <Mic size={18} strokeWidth={2.5} />}
-                  </button>
+                    {uploading ? (
+                      <Loader2 size={16} className="animate-spin shrink-0" />
+                    ) : recording ? (
+                      <>
+                        <Square size={12} className="shrink-0" fill="currentColor" strokeWidth={2} />
+                        <span>结束录音</span>
+                      </>
+                    ) : (
+                      <>
+                        <Mic size={16} strokeWidth={2.5} className="shrink-0" />
+                        <span>开始录音</span>
+                      </>
+                    )}
+                  </motion.button>
                 )}
               </div>
               <div className="space-y-2.5 flex-1 min-h-[120px] overflow-y-auto">
@@ -271,7 +284,7 @@ export const Audio: React.FC = () => {
             </motion.div>
           </section>
 
-          {/* 右侧：文字留言 - QQ 空间留言板风格 */}
+          {/* 右侧：文字留言 - 与 LifeTimer 同款 font-serif */}
           <section className="flex flex-col h-full">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -285,8 +298,8 @@ export const Audio: React.FC = () => {
                 <span className="text-[12px] text-muted ml-1">留言板</span>
               </div>
               {hasSupabase && (
-                <div className="mb-5 flex flex-col gap-3 p-4 rounded-xl border border-[#e8e8e8] bg-[#fafafa]">
-                  <p className="text-[12px] text-muted mb-1">说些什么，欢迎来访~</p>
+                <div className="mb-5 flex flex-col gap-2.5 p-4 rounded-xl border border-[#e8e8e8] bg-[#fafafa]">
+                  <p className="text-[12px] text-muted mb-0.5">说些什么，欢迎来访~</p>
                   <textarea
                     ref={textAreaRef}
                     value={textInput}
@@ -294,22 +307,23 @@ export const Audio: React.FC = () => {
                     onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSendText())}
                     placeholder="写下你想说的话..."
                     rows={3}
-                    className="w-full px-4 py-3 rounded-lg border border-[#e0e0e0] bg-white text-ink placeholder:text-muted resize-none focus:outline-none focus:ring-2 focus:ring-[#FFB800]/40 focus:border-[#FFB800]/50 text-[15px] leading-relaxed"
+                    className="w-full px-3 py-2 rounded-md border border-[#e0e0e0] bg-white text-ink placeholder:text-muted/80 resize-none focus:outline-none focus:ring-1.5 focus:ring-[#FFB800]/40 focus:border-[#FFB800]/50 text-[13px] leading-[1.5] min-h-[4.5rem] font-serif"
                   />
                   <motion.button
                     onClick={handleSendText}
                     disabled={!textInput.trim() || sendingText}
-                    whileTap={{ scale: 0.98 }}
-                    className="self-end py-2.5 px-6 rounded-lg flex items-center justify-center gap-2 font-medium text-[14px] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    whileTap={{ scale: 0.97 }}
+                    className="self-end py-2 px-4 rounded-md flex items-center justify-center gap-1.5 text-[13px] font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
                     style={{
-                      backgroundColor: textInput.trim() ? '#FFB800' : '#d1d1d6',
-                      color: 'white',
+                      backgroundColor: textInput.trim() ? '#1f2937' : '#f3f4f6',
+                      color: textInput.trim() ? '#ffffff' : '#9ca3af',
+                      border: '1px solid ' + (textInput.trim() ? '#1f2937' : '#e5e7eb'),
                     }}
                   >
                     {sendingText ? (
-                      <Loader2 size={16} className="animate-spin" />
+                      <Loader2 size={14} className="animate-spin" />
                     ) : (
-                      <Send size={16} strokeWidth={2.5} className="rotate-[-30deg] shrink-0" />
+                      <Send size={14} strokeWidth={2.5} className="rotate-[-30deg] shrink-0" />
                     )}
                     <span>{sendingText ? '发表中...' : '发表'}</span>
                   </motion.button>

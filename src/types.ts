@@ -27,6 +27,21 @@ export interface Photo {
   date?: string;
 }
 
+/** 视频作品（YouTube / Bilibili 嵌入） */
+export interface Video {
+  id: string;
+  title: string;
+  description: string;
+  /** 封面图 URL，可选；不填则用平台默认缩略图 */
+  cover?: string;
+  /** 视频链接：YouTube 或 Bilibili 的分享链接 */
+  videoUrl: string;
+  /** 时长，如 "3:42" */
+  duration?: string;
+  tags?: string[];
+  date?: string;
+}
+
 export interface Business {
   title: string;
   description: string;
@@ -48,5 +63,30 @@ export interface Voice {
 export interface TextMessage {
   id: string;
   content: string;
+  created_at: string;
+}
+
+/** 人格画像：每月生成的人格特质词云 */
+export interface PersonalityPortrait {
+  id: string;
+  period: string;  // "2026-02"
+  words: { text: string; weight: number }[];
+  created_at: string;
+}
+
+/** Year in Review 周期总结 */
+export interface YearReview {
+  id: string;
+  period_type: 'week' | 'month' | 'quarter' | 'half_year' | 'year';
+  period_value: string;
+  year: string;
+  annual_word: string | null;
+  metrics: Record<string, number>;
+  highlights: { type: string; title: string; date?: string }[];
+  summary_done: string | null;
+  summary_success: string | null;
+  summary_fail: string | null;
+  summary_learned: string | null;
+  encouragement: string | null;
   created_at: string;
 }

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import data from '../data.json';
+import { useLanguage } from '../context/LanguageContext';
 import { LayoutGrid, FolderOpen } from 'lucide-react';
 import type { Photo } from '../types';
 
@@ -18,6 +18,7 @@ function groupByLocation(photos: Photo[]): [string, Photo[]][] {
 }
 
 export const Photography: React.FC = () => {
+  const { data } = useLanguage();
   const photos = (data as { photos: Photo[] }).photos;
   const [layout, setLayout] = useState<LayoutMode>('grid');
   const collections = useMemo(() => groupByLocation(photos), [photos]);
@@ -30,13 +31,10 @@ export const Photography: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* 头部：标题与副标题合并为一行 */}
-          <header className="flex flex-col items-center text-center mb-12">
-            <h1 className="text-xl md:text-2xl font-serif text-ink max-w-2xl mb-6">
-              摄影 · 我拍的一些照片集合，记录驻足过的瞬间。
-            </h1>
-            {/* 布局切换 */}
-            <div className="flex rounded-lg border border-ink/10 p-0.5" aria-label="切换显示布局">
+          {/* 头部：布局切换在左，标题在右，水平对齐 */}
+          <header className="flex flex-row items-center justify-between gap-6 mb-12">
+            {/* 布局切换：左对齐 */}
+            <div className="flex rounded-lg border border-ink/10 p-0.5 shrink-0" aria-label="切换显示布局">
               <button
                 onClick={() => setLayout('grid')}
                 title="网格"
@@ -56,6 +54,10 @@ export const Photography: React.FC = () => {
                 <FolderOpen size={18} strokeWidth={1.5} />
               </button>
             </div>
+            {/* 标题：右对齐，与切换按钮水平对齐 */}
+            <h1 className="text-xl md:text-2xl font-serif text-ink text-left flex-1">
+              摄影 · 我拍的一些照片集合，记录驻足过的瞬间。
+            </h1>
           </header>
 
           {/* 相册展示 */}

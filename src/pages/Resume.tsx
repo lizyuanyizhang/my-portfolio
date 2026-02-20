@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import data from '../data.json';
+import { useLanguage } from '../context/LanguageContext';
 import { Mail, Linkedin, MapPin, Briefcase, GraduationCap, Globe, Twitter } from 'lucide-react';
 
 export const Resume: React.FC = () => {
-  const { personalInfo, resume } = data as any;
+  const { data } = useLanguage();
+  const { personalInfo, resume } = data as { personalInfo: any; resume: any };
 
   return (
     <div className="pt-32 pb-24 px-6">

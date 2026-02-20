@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import data from '../data.json';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   Mail, 
   Linkedin, 
@@ -13,16 +13,17 @@ import {
 } from 'lucide-react';
 
 export const Home: React.FC = () => {
-  const { personalInfo } = data;
+  const { data } = useLanguage();
+  const { personalInfo, ui } = data;
 
   const contactLinks = [
     { icon: <Mail size={20} />, label: personalInfo.email, href: `mailto:${personalInfo.email}` },
     { icon: <Linkedin size={20} />, label: 'LinkedIn', href: personalInfo.linkedin },
-    { icon: <ExternalLink size={20} />, label: '小红书主页', href: personalInfo.xiaohongshu },
+    { icon: <ExternalLink size={20} />, label: ui.xiaohongshu, href: personalInfo.xiaohongshu },
     { icon: <Github size={20} />, label: 'GitHub', href: personalInfo.github },
     { icon: <Twitter size={20} />, label: 'X (Twitter)', href: personalInfo.x },
-    { icon: <Mic size={20} />, label: '小宇宙播客', href: personalInfo.podcast },
-    ...(personalInfo.jike ? [{ icon: <Sparkles size={20} />, label: '即刻', href: personalInfo.jike }] : []),
+    { icon: <Mic size={20} />, label: ui.podcast, href: personalInfo.podcast },
+    ...(personalInfo.jike ? [{ icon: <Sparkles size={20} />, label: ui.jike, href: personalInfo.jike }] : []),
   ];
 
   return (
@@ -46,17 +47,16 @@ export const Home: React.FC = () => {
           </p>
           <div className="h-px w-24 bg-accent/30" />
           <p className="text-lg md:text-xl text-ink/70 leading-relaxed font-serif">
-            这是一场跨越百年的生命实验（1996 - 2096）。点击年份展开那些被记录的瞬间，或是静待未来的留白被填满。
+            {ui.home.lifeExperiment}
           </p>
 
-          {/* 联系我 Contact Me */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="pt-8 mt-8 border-t border-ink/10"
           >
-            <h3 className="text-xs uppercase tracking-widest text-muted font-semibold mb-6">联系我</h3>
+            <h3 className="text-xs uppercase tracking-widest text-muted font-semibold mb-6">{ui.home.contact}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {contactLinks.map((link, i) => (
                 <a 
@@ -77,7 +77,7 @@ export const Home: React.FC = () => {
                   <span className="text-accent/80 group-hover:scale-110 transition-transform shrink-0">
                     <MessageCircle size={20} />
                   </span>
-                  <span className="text-sm font-medium">微信公众号</span>
+                  <span className="text-sm font-medium">{ui.wechat}</span>
                   <div className="absolute left-0 bottom-full mb-3 opacity-0 group-hover:opacity-100 transition-all pointer-events-none translate-y-2 group-hover:translate-y-0 z-10">
                     <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10">
                       <img 
@@ -86,7 +86,7 @@ export const Home: React.FC = () => {
                         className="w-64 h-auto rounded-lg"
                         referrerPolicy="no-referrer"
                       />
-                      <p className="text-ink text-xs text-center mt-2 font-sans">扫码关注公众号</p>
+                      <p className="text-ink text-xs text-center mt-2 font-sans">{ui.scanQR}</p>
                     </div>
                   </div>
                 </div>

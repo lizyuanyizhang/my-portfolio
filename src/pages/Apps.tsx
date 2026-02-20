@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import data from '../data.json';
+import { useLanguage } from '../context/LanguageContext';
 import { ExternalLink, Sparkles } from 'lucide-react';
 import type { Project } from '../types';
 
 export const Apps: React.FC = () => {
+  const { data } = useLanguage();
   const projects = (data as { projects: Project[] }).projects;
 
   return (

@@ -1,18 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useScroll, useSpring } from 'motion/react';
-import data from '../data.json';
-import { 
-  MapPin, 
-  Star, 
-  BookOpen, 
-  Film, 
-  Music, 
-  ArrowRight,
+import { useLanguage } from '../context/LanguageContext';
+import {
+  MapPin,
+  Star,
+  BookOpen,
+  Film,
+  Music,
   ChevronRight,
-  Quote
+  ChevronDown,
+  Loader2,
+  Sparkles,
 } from 'lucide-react';
 import { ProjectCard } from '../components/ProjectCard';
 import { EssayCard } from '../components/EssayCard';
+import { YearReviewCard } from '../components/YearReviewCard';
+import { PersonalityPortrait } from '../components/PersonalityPortrait';
+import { LocationTrailMap } from '../components/LocationTrailMap';
+import { OwnerUnlockModal } from '../components/OwnerUnlockModal';
+import { aggregateLocationPoints } from '../lib/geoTrailUtils';
+import { aggregateContentForPeriod, generatePersonalityPortrait } from '../lib/personalityPortraitApi';
+import { supabase } from '../lib/supabase';
+import { useOwnerMode } from '../hooks/useOwnerMode';
+import {
+  aggregateDataForYear,
+  fetchVoicesMessagesCount,
+  generateYearReview,
+} from '../lib/yearReviewApi';
+import type { YearReview, PersonalityPortrait as PersonalityPortraitType } from '../types';
 
 const InfluenceIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -24,7 +40,8 @@ const InfluenceIcon = ({ type }: { type: string }) => {
 };
 
 export const Timeline: React.FC = () => {
-  const { personalInfo, timeline: rawTimeline, projects, essays, photos } = data as any;
+  const { data } = useLanguage();
+  const { personalInfo, timeline: rawTimeline, projects, essays, photos, videos = [] } = data as any;
   
   // Generate full timeline from 1996 to 2096
   const fullTimeline = Array.from({ length: 2096 - 1996 + 1 }, (_, i) => {
@@ -43,6 +60,103 @@ export const Timeline: React.FC = () => {
   const currentYear = new Date().getFullYear().toString();
   const [activeYear, setActiveYear] = useState(currentYear);
   const [expandedYears, setExpandedYears] = useState<string[]>([currentYear]);
+  const [yearReviews, setYearReviews] = useState<YearReview[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [generatingYear, setGeneratingYear] = useState<string | null>(null);
+  const [personalityPortraits, setPersonalityPortraits] = useState<PersonalityPortraitType[]>([]);
+  const [loadingPortraits, setLoadingPortraits] = useState(true);
+  const [generatingPortrait, setGeneratingPortrait] = useState(false);
+  const { isOwner, unlock, showUnlockModal, setShowUnlockModal } = useOwnerMode();
+  const [mobileOverviewOpen, setMobileOverviewOpen] = useState(false);
+
+  const fetchYearReviews = useCallback(async () => {
+    if (!supabase) {
+      setLoadingReviews(false);
+      return;
+    }
+    try {
+      const { data, error } = await supabase.from('year_reviews').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      setYearReviews((data as YearReview[]) ?? []);
+    } catch {
+      setYearReviews([]);
+    } finally {
+      setLoadingReviews(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchYearReviews();
+  }, [fetchYearReviews]);
+
+  const fetchPersonalityPortraits = useCallback(async () => {
+    if (!supabase) {
+      setLoadingPortraits(false);
+      return;
+    }
+    try {
+      const { data, error } = await supabase
+        .from('personality_portraits')
+        .select('*')
+        .order('period', { ascending: false })
+        .limit(12);
+      if (error) throw error;
+      setPersonalityPortraits((data as PersonalityPortraitType[]) ?? []);
+    } catch {
+      setPersonalityPortraits([]);
+    } finally {
+      setLoadingPortraits(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPersonalityPortraits();
+  }, [fetchPersonalityPortraits]);
+
+  const currentPeriod = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+  const latestPortrait = personalityPortraits[0];
+
+  const handleGeneratePersonalityPortrait = useCallback(async () => {
+    if (!supabase || !isOwner) return;
+    setGeneratingPortrait(true);
+    try {
+      const aggregatedContent = aggregateContentForPeriod(
+        { essays, projects, photos, timeline: rawTimeline, personalInfo },
+        yearReviews.filter((r) => r.period_type === 'year')
+      );
+      const portrait = await generatePersonalityPortrait(currentPeriod, aggregatedContent, supabase);
+      setPersonalityPortraits((prev) => [portrait, ...prev.filter((p) => p.period !== currentPeriod)]);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : '生成失败');
+    } finally {
+      setGeneratingPortrait(false);
+    }
+  }, [essays, projects, photos, rawTimeline, personalInfo, yearReviews, currentPeriod, isOwner]);
+
+  const handleGenerateYearReview = useCallback(
+    async (yearStr: string) => {
+      if (!supabase) return;
+      const year = parseInt(yearStr, 10);
+      if (isNaN(year)) return;
+      setGeneratingYear(yearStr);
+      try {
+        const voicesMessages = await fetchVoicesMessagesCount(supabase, year);
+        const aggregated = aggregateDataForYear(
+          { essays, projects, photos, videos },
+          year,
+          voicesMessages.voices,
+          voicesMessages.messages
+        );
+        const review = await generateYearReview('year', yearStr, aggregated, supabase);
+        setYearReviews((prev) => [review, ...prev.filter((r) => !(r.year === yearStr && r.period_type === 'year'))]);
+      } catch (e) {
+        alert(e instanceof Error ? e.message : '生成失败');
+      } finally {
+        setGeneratingYear(null);
+      }
+    },
+    [essays, projects, photos, videos]
+  );
 
   const toggleYear = (year: string) => {
     setExpandedYears(prev => 
@@ -183,10 +297,43 @@ export const Timeline: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 ml-20 md:ml-24 px-6 md:px-20 py-32">
+      {/* 中部内容；右侧固定栏需预留空间 md:mr-56 lg:mr-64 xl:mr-80 */}
+      <div className="flex-1 ml-20 md:ml-24 md:mr-56 lg:mr-64 xl:mr-80 min-w-0">
+        <main className="min-w-0 px-4 md:px-8 py-24 max-w-2xl mx-auto">
+        {/* 小屏：顶部可展开的年度概览（关键词云 + 地理轨迹） */}
+        <div className="md:hidden mb-8 rounded-2xl border border-ink/10 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setMobileOverviewOpen((o) => !o)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-ink/[0.02] hover:bg-ink/[0.04] transition-colors"
+          >
+            <span className="text-sm font-medium">人格画像 · 地理轨迹</span>
+            <ChevronDown className={`text-muted transition-transform ${mobileOverviewOpen ? 'rotate-180' : ''}`} size={18} />
+          </button>
+          {mobileOverviewOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              className="px-4 pb-4 space-y-4"
+            >
+              <PersonalityPortrait
+                words={latestPortrait?.words ?? []}
+                onGenerate={isOwner ? handleGeneratePersonalityPortrait : undefined}
+                isGenerating={generatingPortrait}
+                isLoading={loadingPortraits}
+              />
+              <LocationTrailMap
+                points={aggregateLocationPoints({
+                  timeline: rawTimeline,
+                  photos,
+                  personalInfo,
+                })}
+              />
+            </motion.div>
+          )}
+        </div>
         {/* Timeline Sections */}
-        <div className="space-y-12">
+        <div className="space-y-8">
           {fullTimeline.map((item: any) => {
             const isExpanded = expandedYears.includes(item.year);
             const hasData = rawTimeline.some((t: any) => t.year === item.year);
@@ -201,19 +348,19 @@ export const Timeline: React.FC = () => {
                 {/* Year Row (Collapsed State) */}
                 <div 
                   onClick={() => toggleYear(item.year)}
-                  className={`flex items-center gap-8 py-8 cursor-pointer border-b border-ink/5 transition-all px-4 rounded-xl ${
+                  className={`flex items-center gap-4 py-4 cursor-pointer border-b border-ink/5 transition-all px-3 rounded-lg ${
                     isExpanded ? 'bg-ink/[0.02]' : ''
                   } ${
                     activeYear === item.year ? 'bg-accent/5 ring-1 ring-accent/20' : 'hover:bg-ink/[0.02]'
                   }`}
                 >
-                  <span className={`text-4xl md:text-6xl font-serif transition-all duration-500 ${
+                  <span className={`text-xl md:text-2xl font-serif transition-all duration-500 ${
                     activeYear === item.year ? 'text-accent scale-105' : (isExpanded || hasData ? 'text-ink' : 'text-ink/10')
                   }`}>
                     {item.year}
                   </span>
-                  <div className="flex-1">
-                    <h3 className={`text-lg md:text-xl font-serif transition-all duration-500 ${
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`text-sm md:text-base font-serif transition-all duration-500 truncate ${
                       activeYear === item.year ? 'text-ink font-medium' : (hasData ? 'opacity-100' : 'opacity-20')
                     }`}>
                       {item.event}
@@ -232,20 +379,70 @@ export const Timeline: React.FC = () => {
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="pt-12 pb-24 px-4">
-                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                        {/* Left Column: Details & Influences */}
-                        <div className="lg:col-span-4 space-y-12">
-                          <div className="flex items-center gap-2 text-accent font-mono text-xs uppercase tracking-widest">
-                            <MapPin size={14} />
+                    <div className="pt-8 pb-16 px-2 space-y-8">
+                      {/* Year in Review：有则展示，无则显示生成按钮 */}
+                      {(() => {
+                        const yearReview = yearReviews.find(
+                          (r) => r.year === item.year && r.period_type === 'year'
+                        );
+                        if (yearReview) {
+                          return <YearReviewCard review={yearReview} />;
+                        }
+                        if (item.year !== '未来' && !/^\d{4}$/.test(item.year)) return null;
+                        const y = parseInt(item.year, 10);
+                        if (isNaN(y)) return null;
+                        const canGenerate = supabase && (y >= 2020 && y <= new Date().getFullYear());
+                        if (!canGenerate) return null;
+                        if (isOwner) {
+                          return (
+                            <div className="rounded-2xl border border-dashed border-ink/20 bg-ink/[0.02] p-5 text-center">
+                              <p className="text-xs text-muted mb-3">生成本期总结，让 AI 帮你复盘</p>
+                              <button
+                                onClick={() => handleGenerateYearReview(item.year)}
+                                disabled={generatingYear !== null}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm bg-accent text-paper font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
+                              >
+                                {generatingYear === item.year ? (
+                                  <>
+                                    <Loader2 size={14} className="animate-spin" />
+                                    生成中...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Sparkles size={14} />
+                                    生成 {item.year} 年度总结
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div className="rounded-2xl border border-dashed border-ink/20 bg-ink/[0.02] p-5 text-center">
+                            <p className="text-xs text-muted mb-3">已有总结会在此展示</p>
+                            <button
+                              type="button"
+                              onClick={() => setShowUnlockModal(true)}
+                              className="text-[10px] text-muted hover:text-accent underline underline-offset-2"
+                            >
+                              站长入口
+                            </button>
+                          </div>
+                        );
+                      })()}
+                      <div className="grid grid-cols-1 gap-8">
+                        {/* Details & Influences */}
+                        <div className="space-y-6">
+                          <div className="flex items-center gap-2 text-accent font-mono text-[10px] uppercase tracking-widest">
+                            <MapPin size={12} />
                             {item.location}
                           </div>
 
                           {/* Fulfillment Score */}
-                          <div className="p-8 bg-white rounded-[32px] border border-ink/5 shadow-sm">
-                            <div className="flex justify-between items-end mb-4">
-                              <span className="text-[10px] uppercase tracking-widest font-bold text-muted">Fulfillment</span>
-                              <span className="text-3xl font-serif italic">{item.fulfillment}%</span>
+                          <div className="p-4 bg-white rounded-2xl border border-ink/5 shadow-sm">
+                            <div className="flex justify-between items-end mb-2">
+                              <span className="text-[9px] uppercase tracking-widest font-bold text-muted">Fulfillment</span>
+                              <span className="text-xl font-serif italic">{item.fulfillment}%</span>
                             </div>
                             <div className="h-1 w-full bg-ink/5 rounded-full overflow-hidden">
                               <motion.div 
@@ -259,16 +456,16 @@ export const Timeline: React.FC = () => {
 
                           {/* Influences */}
                           {item.influences.length > 0 && (
-                            <div className="space-y-4">
-                              <h4 className="text-[10px] uppercase tracking-widest font-bold text-muted mb-4">书影音 / Influences</h4>
+                            <div className="space-y-2">
+                              <h4 className="text-[9px] uppercase tracking-widest font-bold text-muted mb-2">书影音 / Influences</h4>
                               {item.influences.map((inf: any, i: number) => (
-                                <div key={i} className="flex items-start gap-4 p-4 bg-white rounded-2xl border border-ink/5 shadow-sm">
-                                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                                <div key={i} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-ink/5 shadow-sm">
+                                  <div className="w-6 h-6 rounded-md bg-accent/10 flex items-center justify-center text-accent shrink-0">
                                     <InfluenceIcon type={inf.type} />
                                   </div>
-                                  <div>
-                                    <p className="text-sm font-medium">{inf.title}</p>
-                                    <p className="text-[10px] text-muted font-mono uppercase mt-1">{inf.time}</p>
+                                  <div className="min-w-0">
+                                    <p className="text-xs font-medium truncate">{inf.title}</p>
+                                    <p className="text-[9px] text-muted font-mono uppercase mt-0.5">{inf.time}</p>
                                   </div>
                                 </div>
                               ))}
@@ -276,15 +473,15 @@ export const Timeline: React.FC = () => {
                           )}
                         </div>
 
-                        {/* Right Column: Portfolio */}
-                        <div className="lg:col-span-8 space-y-12">
+                        {/* Portfolio */}
+                        <div className="space-y-6">
                           {/* Photos */}
                           {item.portfolio.photos.length > 0 && (
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-2">
                               {item.portfolio.photos.map((photoId: string, i: number) => {
                                 const photo = photos.find((p: any) => p.id === photoId || p.url === photoId);
                                 return photo ? (
-                                  <div key={i} className="aspect-square rounded-3xl overflow-hidden shadow-md">
+                                  <div key={i} className="aspect-square rounded-xl overflow-hidden shadow-sm">
                                     <img src={photo.url} alt={photo.caption} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                                   </div>
                                 ) : null;
@@ -293,7 +490,7 @@ export const Timeline: React.FC = () => {
                           )}
 
                           {/* Projects & Essays */}
-                          <div className="space-y-6">
+                          <div className="space-y-4">
                             {item.portfolio.projects.map((projId: string) => {
                               const project = projects.find((p: any) => p.id === projId);
                               return project ? <ProjectCard key={project.id} project={project} /> : null;
@@ -314,12 +511,39 @@ export const Timeline: React.FC = () => {
         </div>
 
         {/* Footer Info */}
-        <footer className="mt-64 pt-32 border-t border-ink/5 text-center">
-          <p className="text-muted font-serif italic text-xl">
+        <footer className="mt-32 pt-16 border-t border-ink/5 text-center">
+          <p className="text-muted font-serif italic text-sm">
             她度过了充分自我实现的一生
           </p>
         </footer>
-      </main>
+        </main>
+      </div>
+      {/* 右侧固定栏：用 Portal 挂载到 body，避免父级 transform/overflow 影响 fixed 定位 */}
+      {createPortal(
+        <aside className="fixed right-0 top-0 h-screen w-56 lg:w-64 xl:w-80 border-l border-ink/5 z-40 bg-paper/80 backdrop-blur-md overflow-y-auto max-md:hidden">
+          <div className="pt-24 pb-16 px-4 space-y-6">
+            <PersonalityPortrait
+              words={latestPortrait?.words ?? []}
+              onGenerate={isOwner ? handleGeneratePersonalityPortrait : undefined}
+              isGenerating={generatingPortrait}
+              isLoading={loadingPortraits}
+            />
+            <LocationTrailMap
+              points={aggregateLocationPoints({
+                timeline: rawTimeline,
+                photos,
+                personalInfo,
+              })}
+            />
+          </div>
+        </aside>,
+        document.body
+      )}
+      <OwnerUnlockModal
+        open={showUnlockModal}
+        onClose={() => setShowUnlockModal(false)}
+        onUnlock={unlock}
+      />
     </div>
   );
 };
