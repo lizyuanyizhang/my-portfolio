@@ -6,6 +6,13 @@ coverage/
 *.log
 .env*
 !.env.example
+.elog.env
+.elog-photos.env
+content/elog-posts/
+content/elog-photos/
+elog.cache.json
+elog-photos.cache.json
+public/images/elog/
 
 # 本地 Supabase 配置笔记，可能包含项目信息，不提交
 SUPABASE_SETUP.md

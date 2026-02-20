@@ -13,7 +13,7 @@
     "jike": "https://okjk.co/hI5AlS",
     "wechatQR": "/images/wechat_qr.png",
     "location": "Shanghai, China",
-    "essaysExternalUrl": "https://yuanyizhang.super.site/"
+    "essaysExternalUrl": ""
   },
   "projects": [{"id":"1","title":"New Year Card Generator","description":"Card generator using LLM API for blessings.","image":"/images/projects/newyear-card.png","tags":["React","New Year","AI","Qwen"],"date":"2024","link":"https://newyear-card-generator-55mu.vercel.app/","builtWith":["Cursor","React","Vite"]}],
   "videos": [{"id":"1","title":"A Day on Shanghai Streets","description":"Citywalk fragments recorded on phone.","cover":"https://img.cdn1.vip/i/6997080b2d655_1771505675.webp","videoUrl":"https://www.youtube.com/watch?v=dQw4w9WgXcQ","duration":"3:42","tags":["documentary","city"],"date":"2024-12"}],

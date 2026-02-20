@@ -48,7 +48,10 @@
 
 ---
 
-## 三、方案 B/C/D：语雀 / Notion / FlowUs + Elog（保留现有站点）
+## 三、方案 B/C/D：语雀 / Notion / FlowUs + Elog（保留现有站点） ✅ 已实现 Notion
+
+> **配置说明**：见 [NOTION_ELOG_SETUP.md](./NOTION_ELOG_SETUP.md)。  
+> 在 Notion 写作后执行 `npm run sync`，文章会出现在本站 `/essays` 页面。
 
 ### 适合谁
 
