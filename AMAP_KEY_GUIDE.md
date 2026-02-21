@@ -101,9 +101,10 @@ VITE_AMAP_KEY=你复制的Key
 
 ### Q：地图一直显示「正在加载地图...」不出现结果？
 
-1. **检查 Key 服务平台**：创建 Key 时需勾选 **Web 端 (JS API)**；若仍失败，可额外勾选 **Web 服务**（地理编码需此权限）。
-2. **白名单**：开发阶段将白名单设为 `*`，上线后再填具体域名。
-3. **浏览器控制台**：按 F12 打开 Console，查看是否有高德相关报错（如 INVALID_USER_KEY、DAILY_QUERY_OVER_LIMIT 等）。
+1. **安全密钥**：2021年12月以后申请的 Key 必须配置 `VITE_AMAP_SECURITY_CODE`，否则脚本无法完成初始化。
+2. **Key 服务平台**：需勾选 **Web 端 (JS API)**；若使用地理编码，可额外勾选 **Web 服务**。
+3. **白名单**：开发阶段设为 `*` 或 `127.0.0.1`；上线后填正式域名（如 `yuanyizhang.github.io`）。
+4. **浏览器控制台**：F12 → Console，查看是否有高德报错（如 INVALID_USER_KEY、INVALID_USER_SCODE 等）。
 
 ---
 

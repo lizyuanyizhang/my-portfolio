@@ -11,11 +11,14 @@
     "lint": "tsc --noEmit",
     "sync:notion": "elog sync -e .elog.env -c elog.config.cjs",
     "sync:essays": "node scripts/notion-to-essays.cjs",
-    "sync": "npm run sync:notion && npm run sync:essays && npm run sync:notion:photos && npm run sync:photos",
+    "sync": "npm run sync:notion && npm run sync:essays && npm run sync:notion:photos && npm run sync:photos && npm run sync:timeline && npm run sync:resume",
+    "sync:timeline": "node scripts/notion-to-timeline.cjs",
+    "sync:resume": "node scripts/notion-to-resume.cjs",
     "sync:notion:photos": "elog sync -e .elog-photos.env -c elog-photos.config.cjs -a elog-photos.cache.json",
     "sync:photos": "node scripts/notion-to-photos.cjs"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@google/genai": "^1.29.0",
     "@notionhq/client": "^5.9.0",

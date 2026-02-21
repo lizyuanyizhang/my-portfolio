@@ -32,31 +32,31 @@ export const Photography: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* 小屏垂直堆叠，大屏水平对齐 */}
-          <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6 mb-10 md:mb-12">
-            <div className="flex rounded-lg border border-ink/10 p-0.5 shrink-0 self-start" aria-label="切换显示布局">
+          {/* 与文字页菜单一致的排版：左控制 / 右副标题，font-mono 对齐 */}
+          <header className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4 mb-8 w-full">
+            <div className="flex flex-wrap gap-2 justify-start items-center" aria-label="切换显示布局">
               <button
                 onClick={() => setLayout('grid')}
                 title="网格"
-                className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md transition-all ${
-                  layout === 'grid' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
+                className={`px-3 py-2.5 min-h-[44px] flex items-center justify-center rounded-full font-mono transition-all ${
+                  layout === 'grid' ? 'bg-ink text-[#f8f8f4]' : 'bg-ink/5 text-[#444] hover:bg-ink/10 hover:text-ink'
                 }`}
               >
-                <LayoutGrid size={18} strokeWidth={1.5} />
+                <LayoutGrid size={16} strokeWidth={1.5} />
               </button>
               <button
                 onClick={() => setLayout('collection')}
                 title="合集"
-                className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md transition-all ${
-                  layout === 'collection' ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-ink/5'
+                className={`px-3 py-2.5 min-h-[44px] flex items-center justify-center rounded-full font-mono transition-all ${
+                  layout === 'collection' ? 'bg-ink text-[#f8f8f4]' : 'bg-ink/5 text-[#444] hover:bg-ink/10 hover:text-ink'
                 }`}
               >
-                <FolderOpen size={18} strokeWidth={1.5} />
+                <FolderOpen size={16} strokeWidth={1.5} />
               </button>
             </div>
-            <h1 className="text-lg sm:text-xl md:text-2xl font-serif text-ink text-left flex-1">
+            <p className="font-mono text-[10px] md:text-xs text-[#444] shrink-0">
               摄影 · 我拍的一些照片集合，记录驻足过的瞬间。
-            </h1>
+            </p>
           </header>
 
           {/* 相册展示 */}

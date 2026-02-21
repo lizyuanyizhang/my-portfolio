@@ -121,8 +121,8 @@ async function translateWithDeepL(text, targetLang) {
 /** 百度翻译 API：中文→目标语言，sign = md5(appid+q+salt+密钥) */
 const BAIDU_URL = 'https://fanyi-api.baidu.com/api/trans/vip/translate';
 async function translateWithBaidu(text, targetLang) {
-  const appId = process.env.BAIDU_APP_ID;
-  const secret = process.env.BAIDU_SECRET_KEY;
+  const appId = (process.env.BAIDU_APP_ID || '').trim();
+  const secret = (process.env.BAIDU_SECRET_KEY || '').trim();
   if (!appId || !secret) return text;
   const to = targetLang === 'en' ? 'en' : 'de';
   const salt = String(Date.now());

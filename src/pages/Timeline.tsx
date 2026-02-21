@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { useLanguage } from '../context/LanguageContext';
@@ -116,6 +116,11 @@ export const Timeline: React.FC = () => {
 
   const currentPeriod = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
   const latestPortrait = personalityPortraits[0];
+
+  const locationPoints = useMemo(
+    () => aggregateLocationPoints({ timeline: rawTimeline, photos, personalInfo }),
+    [rawTimeline, photos, personalInfo]
+  );
 
   const handleGeneratePersonalityPortrait = useCallback(async () => {
     if (!supabase || !isOwner) return;
@@ -323,13 +328,7 @@ export const Timeline: React.FC = () => {
                 isGenerating={generatingPortrait}
                 isLoading={loadingPortraits}
               />
-              <LocationTrailMap
-                points={aggregateLocationPoints({
-                  timeline: rawTimeline,
-                  photos,
-                  personalInfo,
-                })}
-              />
+              <LocationTrailMap points={locationPoints} />
             </motion.div>
           )}
         </div>
@@ -529,13 +528,7 @@ export const Timeline: React.FC = () => {
               isGenerating={generatingPortrait}
               isLoading={loadingPortraits}
             />
-            <LocationTrailMap
-              points={aggregateLocationPoints({
-                timeline: rawTimeline,
-                photos,
-                personalInfo,
-              })}
-            />
+            <LocationTrailMap points={locationPoints} />
           </div>
         </aside>,
         document.body

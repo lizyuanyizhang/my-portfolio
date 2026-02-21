@@ -56,7 +56,10 @@
 
 ## 二、简历
 
-**数据来源**：`src/data.json` → `personalInfo` + `resume`
+**数据来源**：
+
+- **Notion 同步（推荐）**：在 Notion 填写简历模板 → `npm run sync:resume` → 自动写入 `data.*.json` 的 `resume`。详见 [NOTION_RESUME_SETUP.md](./NOTION_RESUME_SETUP.md)
+- **手动编辑**：`src/data.json` 或 `src/i18n/data.zh.json` → `personalInfo` + `resume`
 
 ### 修改步骤
 
@@ -364,13 +367,44 @@
 
 ## 六、时间轴
 
-**数据来源**：`src/data.json` → `timeline`
+**数据来源**：Notion 数据库同步到 `src/i18n/data.*.json`（或本地编辑 `src/data.json` → `timeline`）
 
-时间轴自动生成 1996–2096 年，你只需在 `timeline` 中**覆盖有内容的年份**。
+时间轴自动生成 1996–2096 年，你只需在 Notion 或 `timeline` 中**覆盖有内容的年份**。
 
-### 修改步骤
+### 方式 A：Notion 同步（推荐）
 
-1. 打开 `src/data.json`
+与「文字」菜单相同，在 Notion 维护时间轴数据库，执行 `npm run sync` 自动同步。
+
+#### 1. 在 Notion 创建时间轴数据库
+
+1. 新建 **Database - Full page**，命名为「时间轴」或「Timeline」
+2. 建议列（列名支持中英文）：
+   - **年份** (Title 或 Number) — 如 2024、「未来」
+   - **时间轴**（首列）— 可直接写总结/标签，优先展示；Notion 默认不可删
+   - **总结** / **备注** (Text) — 可选，与首列二选一
+   - **地点** (Text) — 该年所在地
+   - **事件** (Text) — 该年发生的事，首列为空时展示
+   - **充实度** (Number) — 0–100，进度条数值
+   - **关联文章** (Multi-select) — 填写 essays 的 id，如 `1`、`2`
+   - **关联项目** (Multi-select) — 填写 projects 的 id
+   - **关联照片** (Multi-select) — 填写 photos 的 id 或 url
+   - **书影音** (Text) — 每行一个，格式：`类型|标题|时间`，如 `book|禅与摩托车维修艺术|2024 春`
+3. 把该数据库**连接**到你的 Notion Integration（同文字/摄影）
+4. 复制数据库 ID（浏览器地址栏 URL 中 32 位字符），填入 `.elog.env`：
+   ```
+   NOTION_DATABASE_TIMELINE_ID=你的时间轴数据库ID
+   ```
+
+#### 2. 同步
+
+- 本地：`npm run sync` 或 `npm run sync:timeline`
+- GitHub：在 Secrets 中添加 `NOTION_DATABASE_TIMELINE_ID`，定时任务或手动运行「Sync from Notion」
+
+---
+
+### 方式 B：手动编辑
+
+1. 打开 `src/i18n/data.zh.json`（或 `src/data.json`）
 2. 在 `timeline` 数组中添加或编辑年份对象：
 
 ```json
@@ -398,7 +432,7 @@
 
 | 字段 | 必填 | 说明 |
 |------|------|------|
-| year | ✓ | 年份，如 "2024" |
+| year | ✓ | 年份，如 "2024" 或 "未来" |
 | location | ✓ | 地点 |
 | event | ✓ | 事件/描述 |
 | fulfillment | | 0–100，进度条数值 |
