@@ -70,14 +70,6 @@
     },
     {
       "id": "3",
-      "title": "My test",
-      "excerpt": "The essence of wealth is \"survival redundancy\". Human pursuit of huge wealth is essentially a pursuit of certainty about the future. In biology, this is called 'energy storage'; In psychology, this is called 'sense of security'; In the financial market, this is called 'marginal safety'.",
-      "date": "2026-02-20",
-      "category": "技术思考",
-      "content": "The essence of wealth is' survival redundancy '"
-    },
-    {
-      "id": "4",
       "title": "hehe",
       "excerpt": "In Kuala Lumpur or Malacca, the most famous attractions are mosques, which are truly beautiful - blue, pink, seaside mosques. For the first time, I was deeply attracted by the architectural aesthetics of the Islamic world. One of the handsome young men we played with in 2006 is from Gansu and also a Muslim. He is still in college and heard that the Eid al Fitr festival here is quite grand, so we made a special effort ..",
       "date": "2026-02-20",
@@ -85,7 +77,7 @@
       "content": "In Kuala Lumpur or Malacca, the most famous attractions are mosques, which are truly beautiful - blue, pink, seaside mosques. For the first time, I was deeply attracted by the architectural aesthetics of the Islamic world. One of the handsome young men we played with in 2006 is from Gansu and also a Muslim. He is still in college and heard that the Eid al Fitr festival here is quite grand, so he specially flew over to experience it."
     },
     {
-      "id": "5",
+      "id": "4",
       "title": "Hahaha",
       "excerpt": "Having hurried through half of his life in the world, renowned throughout Beijing and England, 38 year old Han Ziqi's soul was shaken by love for the first time, an emotion he had never experienced before. In the past, he only knew that there were grudges and grudges between people, and that you came and went to repay kindness or resentment, but he didn't know that there was still his own \"love\"",
       "date": "2026-02-20",
@@ -93,7 +85,7 @@
       "content": "Having hurried through half of his life in the world, renowned throughout Beijing and England, 38 year old Han Ziqi's soul was shaken by love for the first time, an emotion he had never experienced before. In the past, he only knew that there were grudges and grudges between people, and that you came and went to repay kindness or resentment, but he didn't know that there was still his own \"love\""
     },
     {
-      "id": "6",
+      "id": "5",
       "title": "hehe",
       "excerpt": "The text I left on my friend circle at that time was a depiction of the classic scenery of Java Island on a train that traveled hundreds of kilometers. The almost identical, special, and unexpected landscape was a tropical one that I never expected: several white bird flocks flew freely into the sky, far away from the fields, far away from the rice paddies, flying towards the white and quiet clouds. A distant mosque, a boy playing football on the grass ..",
       "date": "2026-02-20",
@@ -101,15 +93,7 @@
       "content": "The text I left on my friend circle at that time was a depiction of the classic scenery of Java Island on a train that traveled hundreds of kilometers. The almost identical, special, and unexpected landscape was a tropical one that I never expected: several white bird flocks flew freely into the sky, far away from the fields, far away from the rice paddies, flying towards the white and quiet clouds. The mosque in the distance, the boys playing football on the grass, the gloomy tropical weather, the imprints in their hearts that pass by in a flash, the blue clothed boys riding motorcycles on the field road like the wind, facing the direction of the train from afar, the town built along the railway tracks, with clear and smiling hot tea handed over by the tall passenger, the motorcycle army waiting for the train to leave, the headlights lit up, tightly and neatly, as if the train was passing through a rice field."
     },
     {
-      "id": "7",
-      "title": "Test again",
-      "excerpt": "History is ruthless. After reading this book, some of my doubts seem to have been answered, which is that Muslims themselves are not much different from us, only that some religious rules forcibly separate our world from theirs. For example, Hui Hui cannot intermarry with other ethnic groups unless the other party is willing to join Islam. For example, Muslim weddings and funerals are generally not allowed to involve other ethnic groups ..",
-      "date": "2026-02-20",
-      "category": "旅行感受",
-      "content": "History is ruthless."
-    },
-    {
-      "id": "8",
+      "id": "6",
       "title": "test",
       "excerpt": "He's so confused. Those jade didn't belong to him as the 'Jade King', nor did they belong to the 'Jade Demon' old man back then, nor did they belong to anyone. These jade slaves are just temporary guardians, and the jade will eventually be lost from their hands and flow into the endless river. He himself can only return to the yellow earth naked, unable to take anything away, only a tired body ..",
       "date": "2026-02-20",
@@ -172,7 +156,7 @@
     }
   ],
   "resume": {
-    "summary": "",
+    "summary": "总结",
     "experience": [],
     "education": [
       {

@@ -70,14 +70,6 @@
     },
     {
       "id": "3",
-      "title": "Meine Tests",
-      "excerpt": "Das Wesen des Reichtums ist die „Überlebensredundanz“ Die Menschheit strebt nach riesigen Mengen an Reichtum und strebt im Wesentlichen nach Zukunftssicherheit. In der Biologie nennt man dies „Energiereserven“. In der Psychologie nennt man das Sicherheitsgefühl. Auf den Finanzmärkten nennt man dies „Sicherheit am Rande“.",
-      "date": "2026-02-20",
-      "category": "技术思考",
-      "content": "Das Wesen des Reichtums ist \"Überlebensredundanz\""
-    },
-    {
-      "id": "4",
       "title": "Hey, hey!",
       "excerpt": "Einige der bekanntesten Sehenswürdigkeiten in Kuala Lumpur oder Malacca sind Moscheen, die, um ehrlich zu sein, wirklich schön sind, blau, rosa, am Meer gelegene Moscheen, die mich zum ersten Mal von der architektonischen Ästhetik der islamischen Welt begeisterten. Zusammen mit einem der 06 Jahre hübschen Jungen zu spielen, ist Gansu, auch ein Muslim, er ist noch an der Universität, hörte von dieser Seite Eid ist größer, so absichtlich. ..",
       "date": "2026-02-20",
@@ -85,15 +77,15 @@
       "content": "Einige der bekanntesten Sehenswürdigkeiten in Kuala Lumpur oder Malacca sind Moscheen, die, um ehrlich zu sein, wirklich schön sind, blau, rosa, am Meer gelegene Moscheen, die mich zum ersten Mal von der architektonischen Ästhetik der islamischen Welt begeisterten. Einer der 06-jährigen hübschen Jungen, der zusammen spielte, war ein Gansu-Mann und auch ein Muslim, er war noch an der Universität, hörte von der größeren Eid-Fest auf dieser Seite, also flog er absichtlich ein wenig zu fühlen."
     },
     {
-      "id": "5",
-      "title": "Hahaha",
+      "id": "4",
+      "title": "Hahaha.",
       "excerpt": "\"In der Welt eilig gelaufen die Hälfte seines Lebens, berühmt Jinghua, berühmt England, achtunddreißig Jahre alt Hanko Chi, zum ersten Mal durch die \"Liebe\" erschüttert die Seele, das ist ein nie gewesenes Gefühl. In den vergangenen Jahren wusste er tatsächlich nur, dass es zwischen Menschen und Menschen eine Freundlichkeit gibt, eine Freundlichkeit, die du zu mir kommst, um dich zu vergellen oder zu vergellen, aber du weißt nicht, dass es noch deine eigene \"Liebe\" gibt.",
       "date": "2026-02-20",
       "category": "影评",
       "content": "\"In der Welt eilig gelaufen die Hälfte seines Lebens, berühmt Jinghua, berühmt England, achtunddreißig Jahre alt Hanko Chi, zum ersten Mal durch die \"Liebe\" erschüttert die Seele, das ist ein nie gewesenes Gefühl. In den vergangenen Jahren wusste er tatsächlich nur, dass es zwischen Menschen und Menschen eine Freundlichkeit gibt, eine Freundlichkeit, die du zu mir kommst, um dich zu vergellen oder zu vergellen, aber du weißt nicht, dass es noch deine eigene \"Liebe\" gibt."
     },
     {
-      "id": "6",
+      "id": "5",
       "title": "Ach!",
       "excerpt": "Der Text, den ich damals im Freundeskreis hinterlassen hatte, war eine Kopie der klassischen Szene von Java in einem Zug, der Hunderte von Kilometern durchquerte, der fast die gleiche, besondere, unerwartete Landschaft war, die Tropik, die ich nie erwartet hatte: mehrere weiße Vögelharden flogen freiwillig zum Himmel, weg von den Feldern, weg von den Reisfeldern, in die weißen ruhigen Wolken. Ferne Moschee, Jugendliche, die Fußball auf dem Gras spielen. ..",
       "date": "2026-02-20",
@@ -101,15 +93,7 @@
       "content": "Der Text, den ich damals im Freundeskreis hinterlassen hatte, war eine Kopie der klassischen Szene von Java in einem Zug, der Hunderte von Kilometern durchquerte, der fast die gleiche, besondere, unerwartete Landschaft war, die Tropik, die ich nie erwartet hatte: mehrere weiße Vögelharden flogen freiwillig zum Himmel, weg von den Feldern, weg von den Reisfeldern, in die weißen ruhigen Wolken. Die ferne Moschee, die Jugendlichen, die Fußball auf dem Gras spielen, das düstere tropische Wetter, die sich in den Herzen bewegen, die blau gekleideten Jugendlichen, die auf Motorrädern auf den Feldstraßen winden, die weit in Richtung des Zuges blicken, die Städte, die an den Schienen gebaut wurden, mit dem heißen Tee, den die Crew mit einem klaren Lächeln hoch lieferte, die Armee der Motorräder, die auf den Zug warteten, die Leuchten leuchten, eng und ordentlich, als würde der Zug auf einem Reisfeld laufen."
     },
     {
-      "id": "7",
-      "title": "Noch einmal testen",
-      "excerpt": "Geschichte unerbittlich. Mit dem Lesen dieses Buches schien ein Teil meiner Zweifel beantwortet zu sein, dass sich die Muslime selbst nicht von uns unterscheiden, sondern dass die Regeln einiger Religionen unsere Welt von ihrer Welt zwingend trennen. Zum Beispiel kann eine Rückkehr nicht mit einer anderen Nation verheiratet werden, es sei denn, die andere Partei ist bereit, sich dem Islam anzuschließen, wie zum Beispiel eine muslimische Ehe, die eine andere Nation verheiratet, ist im Grunde nicht erlaubt. ..",
-      "date": "2026-02-20",
-      "category": "旅行感受",
-      "content": "Geschichte unerbittlich."
-    },
-    {
-      "id": "8",
+      "id": "6",
       "title": "test",
       "excerpt": "Er ist so verwirrt, diese Jade gehören nicht zu ihm, dem \"Jade-König\", noch zu den alten \"Jade-Dämonen\" der damaligen Zeit, gehören niemandem, diese Jade-Sklaven sind nur vorübergehende Hüter, Jade wird schließlich aus ihren Händen verloren gehen und in den langen Fluss fließen. Er selbst kann nur die roten Streifen auf den Gelben zurückgeben, nichts kann er wegnehmen, nur einen müden Körper. ..",
       "date": "2026-02-20",
@@ -172,7 +156,7 @@
     }
   ],
   "resume": {
-    "summary": "",
+    "summary": "总结",
     "experience": [],
     "education": [
       {
