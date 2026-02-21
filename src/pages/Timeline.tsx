@@ -22,6 +22,7 @@ import { OwnerUnlockModal } from '../components/OwnerUnlockModal';
 import { aggregateLocationPoints } from '../lib/geoTrailUtils';
 import { aggregateContentForPeriod, generatePersonalityPortrait } from '../lib/personalityPortraitApi';
 import { supabase } from '../lib/supabase';
+import { assetUrl } from '../lib/assetUrl';
 import { useOwnerMode } from '../hooks/useOwnerMode';
 import {
   aggregateDataForYear,
@@ -482,7 +483,7 @@ export const Timeline: React.FC = () => {
                                 const photo = photos.find((p: any) => p.id === photoId || p.url === photoId);
                                 return photo ? (
                                   <div key={i} className="aspect-square rounded-xl overflow-hidden shadow-sm">
-                                    <img src={photo.url} alt={photo.caption} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                    <img src={assetUrl(photo.url)} alt={photo.caption} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                                   </div>
                                 ) : null;
                               })}

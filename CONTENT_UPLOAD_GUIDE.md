@@ -106,7 +106,142 @@
 
 ## 三、文字
 
-**数据来源**：`src/data.json` → `essays`
+**数据来源**：Notion 数据库同步到 `src/i18n/data.zh.json`、`data.en.json`、`data.de.json`（或本地编辑 `src/data.json`）
+
+### Notion 同步与自动翻译
+
+若使用 Notion 作为内容源，GitHub Actions 会定时（8:00、12:00、16:00、20:00 北京时间）执行 `npm run sync`，将文章同步到三种语言的数据文件。  
+**自动翻译**：支持 DeepL、百度、火山引擎三种翻译 API，配置任一即可；也可用 `TRANSLATION_PROVIDER=deepl|baidu|volc` 显式指定。  
+**增量翻译**：仅翻译新增或内容有变的文章，未改动的复用本地缓存，大幅减少 API 调用。
+
+### 翻译 API 配置指南
+
+支持三种翻译服务，**优先级**：`TRANSLATION_PROVIDER` 指定 > DeepL > 百度 > 火山。配置任一即可启用翻译。
+
+| 服务 | 免费额度 | 需配置的 Secrets |
+|------|----------|------------------|
+| **DeepL** | 50 万字符/月 | `DEEPL_AUTH_KEY` |
+| **百度翻译** | 100 万字符/月（实名后） | `BAIDU_APP_ID` + `BAIDU_SECRET_KEY` |
+| **火山引擎** | 200 万字符/月 | `VOLC_ACCESSKEY` + `VOLC_SECRETKEY` |
+
+---
+
+#### DeepL（海外，德文质量优）
+
+#### 一、获取 DeepL API 密钥（约 5 分钟）
+
+1. **打开 DeepL 官网**  
+   浏览器访问：https://www.deepl.com/pro-api
+
+2. **注册账号**  
+   - 点击页面上的 **「Sign up for free」**
+   - 使用邮箱注册，或选择 Google / Apple 登录
+   - 完成邮箱验证
+
+3. **创建 API 密钥**  
+   - 登录后进入 **Account** 或 **API** 页面  
+   - 找到 **「Authentication Key for DeepL API」**
+   - 点击 **「Create」** 或 **「Generate」** 生成密钥
+   - 复制并保存密钥（形如 `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx:fx`，末尾 `:fx` 表示免费版）
+
+4. **免费额度说明**  
+   - 免费版：每月 500,000 字符
+   - 启用增量翻译后，仅翻译新增或修改的文章，约可支撑每月 60–80 篇新文章
+
+---
+
+#### 百度翻译（国内，访问稳定）
+
+1. **打开** https://fanyi-api.baidu.com/，登录百度账号  
+2. **开发者信息** → **通用文本翻译** → **立即使用**  
+3. **实名认证**后领取免费额度  
+4. 在控制台获取 **APP ID** 和 **密钥**  
+5. 在 GitHub Secrets 中新增 `BAIDU_APP_ID`、`BAIDU_SECRET_KEY`
+
+---
+
+#### 火山引擎（国内，免费额度高）
+
+1. **打开** https://www.volcengine.com/，注册并实名认证  
+2. **开通机器翻译**服务  
+3. **API 访问密钥**中新建密钥，获取 Access Key ID、Secret Access Key  
+4. 在 GitHub Secrets 中新增 `VOLC_ACCESSKEY`、`VOLC_SECRETKEY`
+
+---
+
+#### 指定翻译提供商（可选）
+
+若配置了多种翻译，可通过 `TRANSLATION_PROVIDER` 指定使用哪一种：  
+在 GitHub Secrets 中新增 `TRANSLATION_PROVIDER`，值为 `deepl`、`baidu` 或 `volc`。
+
+---
+
+#### 二、本地运行同步（可选）
+
+如需在本地执行翻译同步：
+
+1. 在项目根目录创建或编辑 `.elog.env` 文件
+2. 添加翻译相关配置（任选一种）：
+   ```
+   DEEPL_AUTH_KEY=你的DeepL密钥
+   ```
+   或
+   ```
+   BAIDU_APP_ID=你的APP_ID
+   BAIDU_SECRET_KEY=你的密钥
+   ```
+   或
+   ```
+   VOLC_ACCESSKEY=你的AccessKey
+   VOLC_SECRETKEY=你的SecretKey
+   ```
+3. 运行同步：
+   ```bash
+   npm run sync
+   ```
+   或只同步文字：
+   ```bash
+   npm run sync:notion && npm run sync:essays
+   ```
+4. 翻译完成后，将变更的 `data.zh.json`、`data.en.json`、`data.de.json` 提交并推送
+
+---
+
+#### 三、GitHub Actions 自动翻译（推荐）
+
+让 GitHub 定时同步时自动翻译：
+
+1. **打开仓库设置**  
+   在你的 GitHub 仓库页面：**Settings** → **Secrets and variables** → **Actions**
+
+2. **新建 Secret**  
+   - 点击 **「New repository secret」**
+   - **Name** 填：`DEEPL_AUTH_KEY`
+   - **Value** 填：你的 DeepL API 密钥
+   - 点击 **「Add secret」**
+
+3. **触发同步**  
+   - 前往 **Actions** 标签
+   - 选择 **「Sync from Notion」** workflow
+   - 点击 **「Run workflow」** 手动运行一次
+   - 或等待定时任务（每天 8:00、12:00、16:00、20:00 北京时间）执行
+
+4. **确认结果**  
+   - 运行完成后，查看是否生成了新的 commit（如 `chore: sync from Notion [automated]`）
+   - 打开 `src/i18n/data.en.json`、`data.de.json`，确认 `essays` 中内容已为英文/德文
+
+---
+
+#### 四、常见问题
+
+| 现象 | 可能原因 | 处理方式 |
+|------|----------|----------|
+| 翻译失败、仍显示中文 | 未配置或配置错误 | 检查 `.elog.env` 或 GitHub Secrets 中对应的翻译密钥 |
+| 报错 403 / 签名错误 | 密钥无效或已过期 | 到对应服务后台重新生成密钥并更新配置 |
+| 报错超出额度 | 免费额度用完 | 等待下月重置，或配置另一种翻译 API |
+| 英文/德文质量不理想 | 机器翻译限制 | 可在 Notion 中手动校对，或更换翻译服务尝试 |
+
+---
 
 ### 修改步骤
 

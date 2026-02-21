@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import { assetUrl } from '../lib/assetUrl';
 import { useLanguage } from '../context/LanguageContext';
 import { LayoutGrid, FolderOpen } from 'lucide-react';
 import type { Photo } from '../types';
@@ -101,7 +102,7 @@ const PhotoCard: React.FC<{ photo: Photo; index: number; hideLocation?: boolean 
     >
       <div className="overflow-hidden rounded-xl bg-muted/10 border border-ink/5 aspect-square">
         <img
-          src={photo.url}
+          src={assetUrl(photo.url)}
           alt={photo.caption}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           referrerPolicy="no-referrer"

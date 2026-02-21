@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Photo } from '../types';
+import { assetUrl } from '../lib/assetUrl';
 
 export const PhotoGrid: React.FC<{ photos: Photo[] }> = ({ photos }) => {
   return (
@@ -15,7 +16,7 @@ export const PhotoGrid: React.FC<{ photos: Photo[] }> = ({ photos }) => {
           className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-muted/10"
         >
           <img 
-            src={photo.url} 
+            src={assetUrl(photo.url)} 
             alt={photo.caption}
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             referrerPolicy="no-referrer"

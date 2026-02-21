@@ -8,13 +8,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-"lint": "tsc --noEmit",
-                "sync:notion": "elog sync -e .elog.env -c elog.config.cjs",
-                "sync:essays": "node scripts/notion-to-essays.cjs",
-                "sync": "npm run sync:notion && npm run sync:essays && npm run sync:notion:photos && npm run sync:photos",
-                "sync:notion:photos": "elog sync -e .elog-photos.env -c elog-photos.config.cjs -a elog-photos.cache.json",
-                "sync:photos": "node scripts/notion-to-photos.cjs"
-            },
+    "lint": "tsc --noEmit",
+    "sync:notion": "elog sync -e .elog.env -c elog.config.cjs",
+    "sync:essays": "node scripts/notion-to-essays.cjs",
+    "sync": "npm run sync:notion && npm run sync:essays && npm run sync:notion:photos && npm run sync:photos",
+    "sync:notion:photos": "elog sync -e .elog-photos.env -c elog-photos.config.cjs -a elog-photos.cache.json",
+    "sync:photos": "node scripts/notion-to-photos.cjs"
+  },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@google/genai": "^1.29.0",
@@ -22,6 +22,7 @@
     "@supabase/supabase-js": "^2.97.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
+    "@volcengine/openapi": "^1.35.0",
     "better-sqlite3": "^12.4.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -35,9 +36,9 @@
     "tailwind-merge": "^3.5.0",
     "vite": "^6.2.0"
   },
-"devDependencies": {
-        "@elog/cli": "^0.14.7",
-        "@types/express": "^4.17.21",
+  "devDependencies": {
+    "@elog/cli": "^0.14.7",
+    "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "supabase": "^2.76.11",

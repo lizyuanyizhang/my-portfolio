@@ -1,6 +1,8 @@
-# 从 Notion 同步文字和摄影到 data.zh.json，提交并推送后触发部署
+# 从 Notion 同步文字和摄影到 data.zh.json / data.en.json / data.de.json，提交并推送后触发部署
 # 需在 Settings → Secrets and variables → Actions 中配置：
 #   NOTION_TOKEN, NOTION_DATABASE_ID, NOTION_DATABASE_PHOTOS_ID
+# 可选翻译密钥（三选一或设置 TRANSLATION_PROVIDER 指定）：
+#   DEEPL_AUTH_KEY | BAIDU_APP_ID+BAIDU_SECRET_KEY | VOLC_ACCESSKEY+VOLC_SECRETKEY
 name: Sync from Notion
 
 on:
@@ -30,6 +32,12 @@ jobs:
         run: |
           echo "NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}" > .elog.env
           echo "NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID }}" >> .elog.env
+          [ -n "${{ secrets.DEEPL_AUTH_KEY }}" ] && echo "DEEPL_AUTH_KEY=${{ secrets.DEEPL_AUTH_KEY }}" >> .elog.env || true
+          [ -n "${{ secrets.BAIDU_APP_ID }}" ] && echo "BAIDU_APP_ID=${{ secrets.BAIDU_APP_ID }}" >> .elog.env || true
+          [ -n "${{ secrets.BAIDU_SECRET_KEY }}" ] && echo "BAIDU_SECRET_KEY=${{ secrets.BAIDU_SECRET_KEY }}" >> .elog.env || true
+          [ -n "${{ secrets.VOLC_ACCESSKEY }}" ] && echo "VOLC_ACCESSKEY=${{ secrets.VOLC_ACCESSKEY }}" >> .elog.env || true
+          [ -n "${{ secrets.VOLC_SECRETKEY }}" ] && echo "VOLC_SECRETKEY=${{ secrets.VOLC_SECRETKEY }}" >> .elog.env || true
+          [ -n "${{ secrets.TRANSLATION_PROVIDER }}" ] && echo "TRANSLATION_PROVIDER=${{ secrets.TRANSLATION_PROVIDER }}" >> .elog.env || true
 
       - name: Create .elog-photos.env
         run: |
@@ -47,7 +55,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git status --porcelain | grep -q .; then
-            git add src/i18n/data.zh.json public/images/elog/
+            git add src/i18n/data.zh.json src/i18n/data.en.json src/i18n/data.de.json public/images/elog/
+            [ -f scripts/.essay-translation-cache.json ] && git add scripts/.essay-translation-cache.json
             git commit -m "chore: sync from Notion [automated]"
             git push
           else

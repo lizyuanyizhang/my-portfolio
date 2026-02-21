@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Project } from '../types';
 import { ExternalLink } from 'lucide-react';
+import { assetUrl } from '../lib/assetUrl';
 
 export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   return (
@@ -11,7 +12,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
     >
       <div className="aspect-[4/3] overflow-hidden">
         <img 
-          src={project.image} 
+          src={assetUrl(project.image)} 
           alt={project.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           referrerPolicy="no-referrer"

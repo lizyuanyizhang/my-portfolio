@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { assetUrl } from '../lib/assetUrl';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   Mail, 
@@ -87,7 +88,7 @@ export const Home: React.FC = () => {
                   <span className="text-sm font-medium">{ui.wechat}</span>
                   <div className={`absolute left-0 bottom-full mb-3 transition-all translate-y-2 z-10 md:group-hover:translate-y-0 ${wechatQRVisible ? 'opacity-100 translate-y-0' : 'opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0'}`}>
                     <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10 w-48 sm:w-64">
-                      <img src={personalInfo.wechatQR} alt="WeChat QR" className="w-full h-auto rounded-lg" referrerPolicy="no-referrer" />
+                      <img src={assetUrl(personalInfo.wechatQR)} alt="WeChat QR" className="w-full h-auto rounded-lg" referrerPolicy="no-referrer" />
                       <p className="text-ink text-xs text-center mt-2 font-sans">{ui.scanQR}</p>
                     </div>
                   </div>

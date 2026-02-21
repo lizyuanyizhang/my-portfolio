@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Linkedin, ExternalLink, Github, Twitter, MessageCircle, Mic } from 'lucide-react';
+import { assetUrl } from '../lib/assetUrl';
 import { useLanguage } from '../context/LanguageContext';
 
 export const Footer: React.FC = () => {
@@ -60,7 +61,7 @@ export const Footer: React.FC = () => {
                 <div className={`absolute left-0 bottom-full mb-4 transition-opacity pointer-events-none md:pointer-events-auto md:group-hover:opacity-100 ${wechatQRVisible ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'}`}>
                   <div className="bg-white p-4 rounded-xl shadow-2xl w-48 sm:w-64">
                     <img
-                      src={personalInfo.wechatQR}
+                      src={assetUrl(personalInfo.wechatQR)}
                       alt="WeChat QR"
                       className="w-full h-auto rounded-lg"
                       referrerPolicy="no-referrer"

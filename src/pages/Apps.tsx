@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { assetUrl } from '../lib/assetUrl';
 import { useLanguage } from '../context/LanguageContext';
 import { ExternalLink, Sparkles } from 'lucide-react';
 import type { Project } from '../types';
@@ -47,7 +48,7 @@ export const Apps: React.FC = () => {
                     <div className="overflow-hidden aspect-video">
                       {project.image ? (
                         <img
-                          src={project.image}
+                          src={assetUrl(project.image)}
                           alt={project.title}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                           referrerPolicy="no-referrer"

@@ -28,19 +28,20 @@ export const Essays: React.FC = () => {
           className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4 mb-8 w-full"
         >
           <div className="flex flex-wrap gap-2 justify-start items-center">
-            {['全部', ...ESSAY_CATEGORIES].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`pl-0 pr-4 py-2.5 min-h-[44px] flex items-center rounded-full text-sm font-medium transition-all text-left font-mono ${
-                  activeCategory === cat
-                    ? 'bg-ink text-[#f8f8f4]'
-                    : 'bg-ink/5 text-[#444] hover:bg-ink/10 hover:text-ink'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            {['全部', ...ESSAY_CATEGORIES].map((cat) => {
+              const label = cat === '全部' ? (data as { ui?: { essays?: { all?: string } } }).ui?.essays?.all ?? '全部' : (data as { ui?: { essays?: { categories?: Record<string, string> } } }).ui?.essays?.categories?.[cat] ?? cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`pl-0 pr-4 py-2.5 min-h-[44px] flex items-center rounded-full text-sm font-medium transition-all text-left font-mono ${
+                    activeCategory === cat ? 'bg-ink text-[#f8f8f4]' : 'bg-ink/5 text-[#444] hover:bg-ink/10 hover:text-ink'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
           <p className="font-mono text-[10px] md:text-xs text-[#444] shrink-0">
             {(data as { ui?: { essays?: { subtitle?: string } } }).ui?.essays?.subtitle ?? '这是她曾写下过的文字，她的见闻，所思所想'}
@@ -66,7 +67,7 @@ export const Essays: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-1.5">
                         <span className="text-xs font-mono text-[#444]">{essay.date}</span>
-                        <span className="text-xs font-mono text-[#444]">{essay.category || '随笔'}</span>
+                        <span className="text-xs font-mono text-[#444]">{(data as { ui?: { essays?: { categories?: Record<string, string> } } }).ui?.essays?.categories?.[essay.category || '随笔'] ?? (essay.category || '随笔')}</span>
                       </div>
                       <h3 className="text-base sm:text-lg md:text-xl font-mono font-semibold text-ink mb-2 group-hover:text-accent transition-colors">
                         {essay.title}

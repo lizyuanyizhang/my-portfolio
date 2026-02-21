@@ -4,6 +4,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useEasterEgg } from '../context/EasterEggContext';
+import { assetUrl } from '../lib/assetUrl';
 
 const SIZE = 48;
 const TAIL_SEGMENT = 12;
@@ -145,7 +146,7 @@ export const EasterEggCharacter: React.FC = () => {
         onClick={() => showKeywordToast?.('喂了一口！✨')}
       >
         <img
-          src="/images/easter-egg-character.png"
+          src={assetUrl('/images/easter-egg-character.png')}
           alt=""
           className="w-full h-full object-cover rounded-full border-2 border-white/50 shadow-lg pointer-events-none"
         />
