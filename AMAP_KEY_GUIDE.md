@@ -90,10 +90,19 @@ VITE_AMAP_KEY=你复制的Key
 
 本项目使用 **Web 端 (JS API)** 即可。
 
+### Q：部署后显示「未配置高德 Key」？
+
+使用 GitHub Actions 部署时，需在仓库 **Settings → Secrets and variables → Actions** 中添加：
+
+- `VITE_AMAP_KEY`：你的高德 Key
+- `VITE_AMAP_SECURITY_CODE`：安全密钥（若控制台有提供）
+
+部署流程会在构建时注入这些变量，否则生产环境无法读取。
+
 ### Q：白名单填什么？
 
 - 本地开发：`*` 或 `127.0.0.1`
-- 上线后：填你的正式域名，如 `www.yuanyizhang.com`
+- 上线后：填你的正式域名或 GitHub Pages 地址，如 `lizyuanyizhang.github.io`
 
 ### Q：Key 泄露了怎么办？
 
