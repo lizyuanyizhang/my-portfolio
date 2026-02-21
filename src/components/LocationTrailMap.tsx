@@ -3,7 +3,7 @@
  * 聚合 timeline、photos、personalInfo 中的地点，在高德地图上绘制轨迹与标记
  * 使用 @amap/amap-jsapi-loader 官方 Loader 加载，确保安全密钥与初始化正确
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, Loader2 } from 'lucide-react';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { aggregateLocationPoints, getStaticCoords, type LocationPoint } from '../lib/geoTrailUtils';
@@ -44,15 +44,22 @@ function loadAmap(key: string, securityCode?: string, plugins: string[] = []): P
   return loadPromise;
 }
 
+/** 地点内容指纹：用于判断是否需要重新加载地图（无新增/无变化则不重载） */
+function pointsSignature(points: LocationPoint[]): string {
+  return points.map((p) => `${p.location}|${p.year || ''}|${p.source}`).join(';');
+}
+
 export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<AMap.Map | null>(null);
   const overlaysRef = useRef<any[]>([]);
+  const lastPointsSigRef = useRef<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const key = (import.meta.env.VITE_AMAP_KEY as string)?.trim();
   const securityCode = (import.meta.env.VITE_AMAP_SECURITY_CODE as string)?.trim() || undefined;
+  const pointsSig = useMemo(() => pointsSignature(points), [points]);
 
   useEffect(() => {
     if (!key) {
@@ -62,8 +69,14 @@ export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, clas
     }
     if (points.length === 0) {
       setStatus('idle');
+      lastPointsSigRef.current = null;
       return;
     }
+
+    if (pointsSig === lastPointsSigRef.current && mapInstanceRef.current) {
+      return;
+    }
+    lastPointsSigRef.current = null;
 
     setStatus('loading');
 
@@ -108,17 +121,20 @@ export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, clas
           map.add(marker);
         });
         map.setFitView();
+        lastPointsSigRef.current = pointsSig;
         setStatus('ready');
       } catch (e) {
+        lastPointsSigRef.current = null;
         setStatus('error');
         setErrorMsg(e instanceof Error ? e.message : '地图初始化失败');
       }
     };
 
     const timeoutId = setTimeout(() => {
+      lastPointsSigRef.current = null;
       setStatus((s) => (s === 'loading' ? 'error' : s));
       setErrorMsg((m) => (m ? m : '地图加载超时'));
-    }, 12000);
+    }, 20000);
 
     let cancelled = false;
     const safeRender = (AMap: typeof window.AMap, path: [number, number][], indices: number[]) => {
@@ -136,6 +152,7 @@ export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, clas
         .catch((e) => {
           if (cancelled) return;
           clearTimeout(timeoutId);
+          lastPointsSigRef.current = null;
           setStatus('error');
           const msg = e?.message || e?.info || String(e);
           setErrorMsg(msg || '加载失败');
@@ -196,6 +213,7 @@ export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, clas
       .catch((e) => {
         if (cancelled) return;
         clearTimeout(timeoutId);
+        lastPointsSigRef.current = null;
         setStatus('error');
         const msg = e?.message || e?.info || String(e);
         setErrorMsg(msg || '加载失败');
@@ -205,7 +223,7 @@ export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, clas
       cancelled = true;
       clearTimeout(timeoutId);
     };
-  }, [key, securityCode, points]);
+  }, [key, securityCode, points, pointsSig]);
 
   useEffect(() => {
     return () => {

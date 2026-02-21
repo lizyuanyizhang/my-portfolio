@@ -108,6 +108,13 @@ VITE_AMAP_KEY=你复制的Key
 
 到控制台将该 Key 删除或重置，并重新生成。
 
+### Q：地图显示「地图加载超时」？
+
+1. **白名单**：必须填**纯域名**，如 `lizyuanyizhang.github.io`，不要填 `https://...` 或 `/my-portfolio/`
+2. **安全密钥**：2021 年 12 月后的 Key 需配置正确；若排查困难，可临时在 GitHub Secrets 添加 `VITE_AMAP_SKIP_SECURITY=1` 跳过（仅测试用）
+3. **浏览器控制台**：F12 → Console，查看是否有 `INVALID_USER_KEY`、`INVALID_USER_SCODE` 等报错
+4. **服务平台**：Key 详情需勾选 **Web 端 (JS API)**；若使用地理编码，额外勾选 **Web 服务**
+
 ### Q：地图一直显示「正在加载地图...」不出现结果？
 
 1. **安全密钥**：2021年12月以后申请的 Key 必须配置 `VITE_AMAP_SECURITY_CODE`，否则脚本无法完成初始化。
