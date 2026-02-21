@@ -110,7 +110,7 @@
 
 ### Notion 同步与自动翻译
 
-若使用 Notion 作为内容源，GitHub Actions 会定时（8:00、12:00、16:00、20:00 北京时间）执行 `npm run sync`，将文章同步到三种语言的数据文件。  
+若使用 Notion 作为内容源，GitHub Actions 会每天 6:00 北京时间执行 `npm run sync`，将文章同步到三种语言的数据文件。  
 **自动翻译**：支持 DeepL、百度、火山引擎三种翻译 API，配置任一即可；也可用 `TRANSLATION_PROVIDER=deepl|baidu|volc` 显式指定。  
 **增量翻译**：仅翻译新增或内容有变的文章，未改动的复用本地缓存，大幅减少 API 调用。
 
@@ -224,7 +224,7 @@
    - 前往 **Actions** 标签
    - 选择 **「Sync from Notion」** workflow
    - 点击 **「Run workflow」** 手动运行一次
-   - 或等待定时任务（每天 8:00、12:00、16:00、20:00 北京时间）执行
+   - 或等待定时任务（每天早上 6:00 北京时间）执行
 
 4. **确认结果**  
    - 运行完成后，查看是否生成了新的 commit（如 `chore: sync from Notion [automated]`）
