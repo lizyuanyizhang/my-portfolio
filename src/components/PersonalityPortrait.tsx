@@ -4,6 +4,7 @@
  */
 import React, { useMemo } from 'react';
 import { motion } from 'motion/react';
+import { useLanguage } from '../context/LanguageContext';
 
 export interface PortraitWord {
   text: string;
@@ -20,7 +21,8 @@ interface PersonalityPortraitProps {
   isLoading?: boolean;
 }
 
-const MAROON = '#722F37';
+/* Brutalist 配色：黑 + 深绿（科技与复古碰撞） */
+const ACCENT_GREEN = '#1a4d3e';
 const BLACK = '#1a1a1a';
 
 export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
@@ -30,42 +32,48 @@ export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
   isGenerating = false,
   isLoading = false,
 }) => {
-  const { items, maxW, minW } = useMemo(() => {
-    if (words.length === 0) return { items: [], maxW: 1, minW: 0 };
+  const { data } = useLanguage();
+  const t = (data as any)?.ui?.personalityPortrait ?? {};
+  const { items } = useMemo(() => {
+    if (words.length === 0) return { items: [] };
     const ws = words.map((w) => w.weight);
     const maxW = Math.max(...ws);
     const minW = Math.min(...ws);
     const range = maxW - minW || 1;
-    const items = words.map((w, i) => ({
+    // 按权重排序，高权重的词更突出（字号更大），且优先展示
+    const sorted = [...words].sort((a, b) => b.weight - a.weight);
+    const items = sorted.map((w, i) => ({
       ...w,
-      size: 0.65 + ((w.weight - minW) / range) * 1.2,
-      rotation: (i % 7) - 3,
-      color: i % 3 === 0 ? MAROON : BLACK,
+      // 字号范围拉大：0.5rem ~ 1.1rem，让权重差异更明显
+      size: 0.5 + ((w.weight - minW) / range) * 0.6,
+      // 旋转角度更丰富：-6° ~ 6°，词云感更强
+      rotation: ((i * 17 + 3) % 13) - 6,
+      color: i % 3 === 0 ? ACCENT_GREEN : BLACK,
     }));
-    return { items, maxW, minW };
+    return { items };
   }, [words]);
 
   if (items.length === 0) {
     return (
       <div
-        className={`rounded-2xl border border-dashed border-ink/15 bg-white p-6 text-center ${className}`}
+        className={`border-2 border-ink bg-white p-6 text-center min-h-[230px] flex flex-col justify-center ${className}`}
       >
-        <p className="text-xs text-muted mb-2">人格画像</p>
+        <p className="text-xs font-mono uppercase tracking-widest text-muted mb-2">{t.title ?? '人格画像'}</p>
         {isLoading ? (
-          <p className="text-[10px] text-muted/80">加载中...</p>
+          <p className="text-[10px] text-muted/80">{t.loading ?? '加载中...'}</p>
         ) : (
           <>
             <p className="text-[10px] text-muted/80 mb-3">
-              通过分析你的文字、图片、时间轴等，每月生成一次人格特质词云
+              {t.description ?? '通过分析你的文字、图片、时间轴等，每月生成一次人格特质词云'}
             </p>
             {onGenerate && (
               <button
                 type="button"
                 onClick={onGenerate}
                 disabled={isGenerating}
-                className="text-xs text-[#722F37] font-medium hover:underline disabled:opacity-50"
+                className="text-xs border-2 border-ink px-3 py-1.5 font-medium hover:bg-ink hover:text-white disabled:opacity-50 transition-colors"
               >
-                {isGenerating ? '生成中...' : '生成本月人格画像'}
+                {isGenerating ? (t.generating ?? '生成中...') : (t.generateBtn ?? '生成本月人格画像')}
               </button>
             )}
           </>
@@ -78,16 +86,20 @@ export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={`rounded-2xl border border-ink/10 bg-white p-4 shadow-sm overflow-hidden ${className}`}
+      className={`border-2 border-ink bg-white p-4 overflow-hidden min-h-[230px] flex flex-col ${className}`}
     >
-      <h4 className="text-[9px] uppercase tracking-widest font-bold text-muted mb-3 font-mono">
-        人格画像
+      <h4 className="text-[9px] uppercase tracking-widest font-mono font-bold text-muted mb-3 shrink-0">
+        {t.title ?? '人格画像'}
       </h4>
-      <div className="flex flex-wrap items-center justify-center leading-tight" style={{ gap: '1px 4px' }}>
+      {/* 词云区：flex-1 撑满剩余高度，加大字距与行距，均匀分布 */}
+      <div
+        className="flex-1 flex flex-wrap items-center justify-center content-center min-h-0"
+        style={{ gap: '10px 14px' }}
+      >
         {items.map(({ text, size, rotation, color }, i) => (
           <span
             key={`${text}-${i}`}
-            className="inline-block font-medium whitespace-nowrap transition-transform hover:scale-105"
+            className="inline-block font-serif font-normal whitespace-nowrap transition-transform hover:scale-110"
             style={{
               fontSize: `${size * 0.7}rem`,
               color,

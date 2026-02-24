@@ -72,8 +72,8 @@ export const Navbar: React.FC = () => {
           <Link to="/audio" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/audio' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
             {ui.nav.audio}
           </Link>
-          <Link to="/video" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/video' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
-            {ui.nav.video}
+          <Link to="/follow" className={`shrink-0 px-3 py-2 rounded-lg transition-all duration-200 min-h-[44px] flex items-center ${location.pathname === '/follow' ? 'text-accent font-semibold scale-105 bg-accent/10' : 'text-muted hover:text-accent'}`}>
+            {ui.nav.follow}
           </Link>
           <button onClick={OPEN_PALETTE} className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-muted hover:text-accent hover:bg-ink/5 transition-all text-xs font-medium border-l border-ink/10 ml-1 min-h-[44px]" title={(data as { ui?: { shortcuts?: string } }).ui?.shortcuts} aria-label="快捷键搜索">
             <Search size={14} className="shrink-0" />

@@ -16,7 +16,7 @@ import { EssayDetail } from './pages/EssayDetail';
 import { Photography } from './pages/Photography';
 import { Apps } from './pages/Apps';
 import { Audio } from './pages/Audio';
-import { Video } from './pages/Video';
+import { Follow } from './pages/Follow';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
@@ -86,9 +86,9 @@ export default function App() {
                   <Audio />
                 </motion.div>
               } />
-              <Route path="/video" element={
-                <motion.div key="video" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-                  <Video />
+              <Route path="/follow" element={
+                <motion.div key="follow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+                  <Follow />
                 </motion.div>
               } />
             </Routes>

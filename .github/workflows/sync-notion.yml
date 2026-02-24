@@ -1,6 +1,7 @@
 # 从 Notion 同步文字和摄影到 data.zh.json / data.en.json / data.de.json，提交并推送后触发部署
 # 需在 Settings → Secrets and variables → Actions 中配置：
-#   NOTION_TOKEN, NOTION_DATABASE_ID, NOTION_DATABASE_PHOTOS_ID
+#   NOTION_TOKEN, NOTION_DATABASE_ID, NOTION_DATABASE_PHOTOS_ID, NOTION_DATABASE_VIDEOS_ID, NOTION_DATABASE_FOLLOW_ID
+#   NOTION_DATABASE_PROJECTS_ID（可选，应用 Notion 同步）
 #   NOTION_DATABASE_TIMELINE_ID（可选，时间轴 Notion 同步）
 #   NOTION_DATABASE_RESUME_ID（可选，简历 Notion 同步）
 # 可选翻译密钥（三选一或设置 TRANSLATION_PROVIDER 指定）：
@@ -48,6 +49,21 @@ jobs:
           echo "NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}" > .elog-photos.env
           echo "NOTION_DATABASE_PHOTOS_ID=${{ secrets.NOTION_DATABASE_PHOTOS_ID }}" >> .elog-photos.env
 
+      - name: Create .elog-videos.env
+        run: |
+          echo "NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}" > .elog-videos.env
+          echo "NOTION_DATABASE_VIDEOS_ID=${{ secrets.NOTION_DATABASE_VIDEOS_ID }}" >> .elog-videos.env
+
+      - name: Create .elog-follow.env
+        run: |
+          echo "NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}" > .elog-follow.env
+          [ -n "${{ secrets.NOTION_DATABASE_FOLLOW_ID }}" ] && echo "NOTION_DATABASE_FOLLOW_ID=${{ secrets.NOTION_DATABASE_FOLLOW_ID }}" >> .elog-follow.env || true
+
+      - name: Create .elog-projects.env
+        run: |
+          echo "NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}" > .elog-projects.env
+          [ -n "${{ secrets.NOTION_DATABASE_PROJECTS_ID }}" ] && echo "NOTION_DATABASE_PROJECTS_ID=${{ secrets.NOTION_DATABASE_PROJECTS_ID }}" >> .elog-projects.env || true
+
       - name: Install dependencies
         run: npm ci
 
@@ -61,6 +77,8 @@ jobs:
           if git status --porcelain | grep -q .; then
             git add src/i18n/data.zh.json src/i18n/data.en.json src/i18n/data.de.json public/images/elog/
             [ -f scripts/.essay-translation-cache.json ] && git add scripts/.essay-translation-cache.json
+            [ -f scripts/.video-translation-cache.json ] && git add scripts/.video-translation-cache.json
+            [ -f scripts/.project-translation-cache.json ] && git add scripts/.project-translation-cache.json
             git commit -m "chore: sync from Notion [automated]"
             git push
           else

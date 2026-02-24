@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CommandPalette } from './CommandPalette';
 
-const ROUTES = ['/', '/timeline', '/resume', '/essays', '/photography', '/apps', '/audio', '/video'] as const;
+const ROUTES = ['/', '/timeline', '/resume', '/essays', '/photography', '/apps', '/audio', '/follow'] as const;
 
 export const KeyboardShortcuts: React.FC = () => {
   const navigate = useNavigate();

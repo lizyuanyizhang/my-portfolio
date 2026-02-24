@@ -59,7 +59,7 @@ export const Home: React.FC = () => {
             className="pt-8 mt-8 border-t border-ink/10"
           >
             <h3 className="text-xs uppercase tracking-widest text-muted font-semibold mb-6">{ui.home.contact}</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
               {contactLinks.map((link, i) => (
                 <a 
                   key={i}

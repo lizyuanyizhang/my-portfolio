@@ -42,6 +42,16 @@ export interface Video {
   date?: string;
 }
 
+/** 我的关注：正在看的、在学习的别人的网页或内容 */
+export interface FollowLink {
+  id: string;
+  name: string;
+  url: string;
+  type: string;
+  description?: string;
+  icon?: string;
+}
+
 export interface Business {
   title: string;
   description: string;
@@ -55,6 +65,8 @@ export interface Voice {
   storage_path: string;
   duration_seconds?: number;
   caption?: string;
+  /** 留言者指纹，用于仅本人可删除 */
+  visitor_id?: string | null;
   /** 公开可访问的音频 URL，由 Storage 生成 */
   url?: string;
 }
@@ -64,6 +76,8 @@ export interface TextMessage {
   id: string;
   content: string;
   created_at: string;
+  /** 留言者指纹，用于仅本人可删除 */
+  visitor_id?: string | null;
 }
 
 /** 人格画像：每月生成的人格特质词云 */

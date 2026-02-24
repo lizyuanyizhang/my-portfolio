@@ -67,19 +67,27 @@
   animation: cursor-firework-pulse 1.5s ease-in-out infinite;
 }
 
-/* 彩蛋轨迹：横向向后的粉色烟花 */
-@keyframes easter-spark-flicker {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.15); }
-}
-.easter-firework {
-  animation: easter-spark-flicker 1s ease-in-out infinite;
-}
-
 /* 文字页：点阵背景 + 等宽字体（逆向工程自参考设计） */
 .essays-page {
   background-color: #f8f8f4;
   background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
   background-size: 12px 12px;
   font-family: var(--font-mono);
+}
+
+/* 时间轴 · Neue Brutalist：粗边框、无阴影、科技复古碰撞 */
+.timeline-brutalist {
+  background-color: #f8f8f4;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* 网点动物背景：微弱浮动动画（动的动物图像） */
+@keyframes timeline-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-1%, -0.5%) scale(1.02); }
+}
+.animate-timeline-float {
+  animation: timeline-float 12s ease-in-out infinite;
 }

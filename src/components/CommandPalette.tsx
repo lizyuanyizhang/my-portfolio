@@ -21,7 +21,7 @@ const PAGES: { path: string; key: string; shortKey?: string }[] = [
   { path: '/photography', key: 'photography' },
   { path: '/apps', key: 'apps' },
   { path: '/audio', key: 'audio' },
-  { path: '/video', key: 'video' },
+  { path: '/follow', key: 'follow' },
 ];
 
 interface CommandPaletteProps {

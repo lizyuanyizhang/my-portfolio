@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { supabase, supabaseConfigStatus, VOICES_BUCKET } from '../lib/supabase';
 import type { Voice, TextMessage } from '../types';
 import { Mic, Loader2, Play, Pause, Trash2, Send, Square } from 'lucide-react';
@@ -18,9 +19,17 @@ export const Audio: React.FC = () => {
   const [textInput, setTextInput] = useState('');
   const [sendingText, setSendingText] = useState(false);
   const [deletingMsgId, setDeletingMsgId] = useState<string | null>(null);
+  const [visitorId, setVisitorId] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    FingerprintJS.load()
+      .then((fp) => fp.get())
+      .then((r) => setVisitorId(r.visitorId))
+      .catch(() => setVisitorId(null));
+  }, []);
 
   /** 获取语音列表 */
   const fetchVoices = useCallback(async () => {
@@ -119,6 +128,7 @@ export const Audio: React.FC = () => {
       const { error: insertErr } = await supabase.from('voices').insert({
         storage_path: filename,
         duration_seconds: duration,
+        visitor_id: visitorId || null,
       });
       if (insertErr) throw insertErr;
       await fetchVoices();
@@ -137,26 +147,31 @@ export const Audio: React.FC = () => {
     setRecording(false);
   }, []);
 
-  /** 删除录音：先删表后删文件，成功后重新拉取列表确保与服务器一致 */
+  /** 删除录音：调用 RPC 校验 visitor_id，仅本人可删；成功后删 storage 文件 */
   const handleDeleteVoice = useCallback(async (voice: Voice) => {
     if (!supabase || !window.confirm('确定要删除这条录音吗？')) return;
     setDeletingId(voice.id);
     setError(null);
     try {
-      const { error: tableErr } = await supabase.from('voices').delete().eq('id', voice.id);
-      if (tableErr) throw new Error(tableErr.message);
+      const { data, error: rpcErr } = await supabase.rpc('delete_voice_if_owner', {
+        p_id: voice.id,
+        p_visitor_id: visitorId || null,
+      });
+      if (rpcErr) throw new Error(rpcErr.message);
+      if (!data || data.length === 0) throw new Error('无权限删除该录音');
+      const storagePath = (data as { storage_path: string }[])[0]?.storage_path;
       setVoices((prev) => prev.filter((v) => v.id !== voice.id));
-      supabase.storage.from(VOICES_BUCKET).remove([voice.storage_path]).then(() => {});
+      if (storagePath) supabase.storage.from(VOICES_BUCKET).remove([storagePath]).then(() => {});
       await fetchVoices();
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      console.error('[语音删除失败]', e); // 便于在 F12 控制台查看完整错误
+      console.error('[语音删除失败]', e);
       setError(msg);
-      alert(`删除失败：${msg}\n\n请检查 Supabase 中 voices 表与 storage 的 DELETE 策略，详见 VOICE_DELETE_TROUBLESHOOTING.md`);
+      alert(`删除失败：${msg}`);
     } finally {
       setDeletingId(null);
     }
-  }, [fetchVoices]);
+  }, [fetchVoices, supabase, visitorId]);
 
   /** 发送文字留言 */
   const handleSendText = useCallback(async () => {
@@ -165,7 +180,10 @@ export const Audio: React.FC = () => {
     setSendingText(true);
     setError(null);
     try {
-      const { error: err } = await supabase.from('messages').insert({ content });
+      const { error: err } = await supabase.from('messages').insert({
+        content,
+        visitor_id: visitorId || null,
+      });
       if (err) throw err;
       setTextInput('');
       await fetchMessages();
@@ -174,22 +192,27 @@ export const Audio: React.FC = () => {
     } finally {
       setSendingText(false);
     }
-  }, [textInput, sendingText, fetchMessages]);
+  }, [textInput, sendingText, fetchMessages, supabase, visitorId]);
 
-  /** 删除文字留言 */
+  /** 删除文字留言：调用 RPC 校验 visitor_id，仅本人可删 */
   const handleDeleteMessage = useCallback(async (msg: TextMessage) => {
     if (!supabase || !window.confirm('确定要删除这条留言吗？')) return;
     setDeletingMsgId(msg.id);
+    setError(null);
     try {
-      const { error: err } = await supabase.from('messages').delete().eq('id', msg.id);
-      if (err) throw err;
+      const { data, error: err } = await supabase.rpc('delete_message_if_owner', {
+        p_id: msg.id,
+        p_visitor_id: visitorId || null,
+      });
+      if (err) throw new Error(err.message);
+      if (!data) throw new Error('无权限删除该留言');
       setMessages((prev) => prev.filter((m) => m.id !== msg.id));
-    } catch {
-      setError('删除失败');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '删除失败');
     } finally {
       setDeletingMsgId(null);
     }
-  }, []);
+  }, [supabase, visitorId]);
 
   const hasSupabase = !!supabase;
 
@@ -277,6 +300,7 @@ export const Audio: React.FC = () => {
                       onPlayPause={() => setPlayingId(playingId === voice.id ? null : voice.id)}
                       onDelete={() => handleDeleteVoice(voice)}
                       isDeleting={deletingId === voice.id}
+                      canDelete={!!(voice.visitor_id && visitorId && voice.visitor_id === visitorId)}
                     />
                   ))
                 )}
@@ -341,6 +365,7 @@ export const Audio: React.FC = () => {
                       message={msg}
                       onDelete={() => handleDeleteMessage(msg)}
                       isDeleting={deletingMsgId === msg.id}
+                      canDelete={!!(msg.visitor_id && visitorId && msg.visitor_id === visitorId)}
                     />
                   ))
                 )}
@@ -363,7 +388,8 @@ const VoiceCard: React.FC<{
   onPlayPause: () => void;
   onDelete: () => void;
   isDeleting?: boolean;
-}> = ({ voice, isPlaying, onPlayPause, onDelete, isDeleting }) => {
+  canDelete?: boolean;
+}> = ({ voice, isPlaying, onPlayPause, onDelete, isDeleting, canDelete = false }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
     const el = audioRef.current;
@@ -401,9 +427,11 @@ const VoiceCard: React.FC<{
       <div className="flex-1 min-w-0">
         <p className="text-[11px] font-medium text-ink truncate">{dateStr}</p>
       </div>
-      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!isDeleting) onDelete(); }} disabled={isDeleting} className="p-1 rounded-full text-ink/60 hover:text-red-500 hover:bg-red-50/80 group-hover:text-ink/80 transition-all shrink-0 disabled:opacity-50">
-        {isDeleting ? <Loader2 size={11} className="animate-spin" /> : <Trash2 size={11} />}
-      </button>
+      {canDelete && (
+        <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!isDeleting) onDelete(); }} disabled={isDeleting} className="p-1 rounded-full text-ink/60 hover:text-red-500 hover:bg-red-50/80 group-hover:text-ink/80 transition-all shrink-0 disabled:opacity-50" aria-label="删除">
+          {isDeleting ? <Loader2 size={11} className="animate-spin" /> : <Trash2 size={11} />}
+        </button>
+      )}
     </motion.div>
   );
 };
@@ -412,7 +440,8 @@ const TextMessageCard: React.FC<{
   message: TextMessage;
   onDelete: () => void;
   isDeleting?: boolean;
-}> = ({ message, onDelete, isDeleting }) => {
+  canDelete?: boolean;
+}> = ({ message, onDelete, isDeleting, canDelete = false }) => {
   const dateStr = message.created_at ? format(new Date(message.created_at), 'M月d日 HH:mm', { locale: zhCN }) : '';
   return (
     <motion.div
@@ -425,9 +454,11 @@ const TextMessageCard: React.FC<{
         <span className="text-[11px] text-muted">{dateStr}</span>
       </div>
       <p className="text-[14px] leading-[1.5] whitespace-pre-wrap break-words text-ink">{message.content}</p>
-      <button onClick={onDelete} disabled={isDeleting} className="absolute top-2 right-2 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-50/80 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50">
-        {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />}
-      </button>
+      {canDelete && (
+        <button onClick={onDelete} disabled={isDeleting} className="absolute top-2 right-2 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-50/80 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50" aria-label="删除">
+          {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />}
+        </button>
+      )}
     </motion.div>
   );
 };

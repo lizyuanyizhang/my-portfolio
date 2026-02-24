@@ -42,7 +42,9 @@ const InfluenceIcon = ({ type }: { type: string }) => {
 
 export const Timeline: React.FC = () => {
   const { data } = useLanguage();
-  const { personalInfo, timeline: rawTimeline, projects, essays, photos, videos = [] } = data as any;
+  const { personalInfo, timeline: rawTimeline, projects, essays, photos, videos = [], ui } = data as any;
+  const t = ui?.timeline ?? {};
+  const yr = ui?.yearReview ?? {};
   
   // Generate full timeline from 1996 to 2096
   const fullTimeline = Array.from({ length: 2096 - 1996 + 1 }, (_, i) => {
@@ -50,8 +52,8 @@ export const Timeline: React.FC = () => {
     const existingData = rawTimeline.find((t: any) => t.year === year);
     return existingData || { 
       year, 
-      location: "未知", 
-      event: "岁月的留白", 
+      location: t.unknownLocation ?? '未知', 
+      event: t.blankEvent ?? '岁月的留白', 
       fulfillment: 50, 
       portfolio: { photos: [], essays: [], projects: [] }, 
       influences: [] 
@@ -246,9 +248,9 @@ export const Timeline: React.FC = () => {
   }, [expandedYears, activeYear]); 
 
   return (
-    <div className="flex min-h-screen bg-paper">
-      {/* Left Sidebar Timeline - Scrollable for 100 years */}
-      <aside className="fixed left-0 top-0 h-screen w-20 md:w-24 border-r border-ink/5 flex flex-col z-40 bg-paper/80 backdrop-blur-md">
+    <div className="timeline-brutalist relative flex min-h-screen bg-[#f8f8f4]">
+      {/* Left Sidebar Timeline - 粗野风格：粗黑边框，保留年份字体 */}
+      <aside className="fixed left-0 top-0 h-screen w-20 md:w-24 border-r-2 border-ink flex flex-col z-40 bg-[#f8f8f4]">
         <div 
           ref={sidebarRef}
           className="flex-1 overflow-y-auto no-scrollbar py-32 px-4 space-y-2"
@@ -281,7 +283,7 @@ export const Timeline: React.FC = () => {
                 }}
                 className={`group relative flex items-center justify-center w-full py-1.5 transition-all duration-300 ${
                   isActive 
-                  ? 'text-accent scale-110 font-bold' 
+                  ? 'text-ink scale-110 font-bold' 
                   : 'text-muted/30 hover:text-ink hover:scale-105'
                 }`}
               >
@@ -291,7 +293,7 @@ export const Timeline: React.FC = () => {
                 {isActive && (
                   <motion.div 
                     layoutId="sidebar-active-dot"
-                    className="absolute right-0 w-1 h-4 bg-accent rounded-l-full"
+                    className="absolute right-0 w-2 h-4 bg-ink rounded-l-sm"
                   />
                 )}
                 {hasData && !isActive && (
@@ -303,24 +305,24 @@ export const Timeline: React.FC = () => {
         </div>
       </aside>
 
-      {/* 中部内容；右侧固定栏需预留空间 md:mr-56 lg:mr-64 xl:mr-80 */}
-      <div className="flex-1 ml-20 md:ml-24 md:mr-56 lg:mr-64 xl:mr-80 min-w-0">
-        <main className="min-w-0 px-4 md:px-8 py-24 max-w-2xl mx-auto">
-        {/* 小屏：顶部可展开的年度概览（关键词云 + 地理轨迹） */}
-        <div className="md:hidden mb-8 rounded-2xl border border-ink/10 overflow-hidden">
+      {/* 中部内容；需在背景之上，右侧固定栏需预留空间 */}
+      <div className="relative z-10 flex-1 ml-20 md:ml-24 md:mr-80 lg:mr-96 xl:mr-[28rem] min-w-0">
+        <main className="min-w-0 px-5 py-20 max-w-2xl mx-auto">
+        {/* 小屏：顶部可展开的年度概览 · Brutalist 粗边框 */}
+        <div className="md:hidden mb-8 rounded-xl border border-[#d0e5d0] overflow-hidden bg-[#eef5ee]">
           <button
             type="button"
             onClick={() => setMobileOverviewOpen((o) => !o)}
-            className="w-full flex items-center justify-between px-4 py-3 bg-ink/[0.02] hover:bg-ink/[0.04] transition-colors"
+            className="w-full flex items-center justify-between px-4 py-3 bg-[#eef5ee] hover:bg-[#e4f0e4] transition-colors border-b border-[#d0e5d0]"
           >
-            <span className="text-sm font-medium">人格画像 · 地理轨迹</span>
+            <span className="text-sm font-medium">{ui?.timeline?.mobileOverviewTitle ?? '人格画像 · 地理轨迹'}</span>
             <ChevronDown className={`text-muted transition-transform ${mobileOverviewOpen ? 'rotate-180' : ''}`} size={18} />
           </button>
           {mobileOverviewOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
-              className="px-4 pb-4 space-y-4"
+              className="px-4 pb-4 pt-2 space-y-4"
             >
               <PersonalityPortrait
                 words={latestPortrait?.words ?? []}
@@ -343,43 +345,51 @@ export const Timeline: React.FC = () => {
                 key={item.year} 
                 id={`year-${item.year}`}
                 data-year={item.year}
-                className="timeline-section group scroll-mt-[25vh]"
+                className="timeline-section group scroll-mt-[25vh] grid grid-cols-[4rem_1fr]"
               >
-                {/* Year Row (Collapsed State) */}
-                <div 
-                  onClick={() => toggleYear(item.year)}
-                  className={`flex items-center gap-4 py-4 cursor-pointer border-b border-ink/5 transition-all px-3 rounded-lg ${
-                    isExpanded ? 'bg-ink/[0.02]' : ''
-                  } ${
-                    activeYear === item.year ? 'bg-accent/5 ring-1 ring-accent/20' : 'hover:bg-ink/[0.02]'
-                  }`}
-                >
-                  <span className={`text-xl md:text-2xl font-serif transition-all duration-500 ${
-                    activeYear === item.year ? 'text-accent scale-105' : (isExpanded || hasData ? 'text-ink' : 'text-ink/10')
+                {/* 左列：年份（固定宽度，与内容列分离） */}
+                <div className="flex items-center py-4 pl-5">
+                  <span className={`text-xl md:text-2xl font-serif tabular-nums transition-all duration-500 ${
+                    activeYear === item.year ? 'text-ink scale-105 font-semibold' : (isExpanded || hasData ? 'text-ink' : 'text-ink/30')
                   }`}>
                     {item.year}
                   </span>
-                  <div className="flex-1 min-w-0">
-                    <h3 className={`text-sm md:text-base font-serif transition-all duration-500 truncate ${
-                      activeYear === item.year ? 'text-ink font-medium' : (hasData ? 'opacity-100' : 'opacity-20')
-                    }`}>
-                      {item.event}
-                    </h3>
-                  </div>
-                  <div className={`transition-transform duration-500 ${isExpanded ? 'rotate-90' : ''}`}>
-                    <ChevronRight className="text-muted" />
+                </div>
+                {/* 右列：事件标题 + 展开按钮，与下方展开内容共享 px-5，左对齐 */}
+                <div
+                  onClick={() => toggleYear(item.year)}
+                  className={`group flex items-center justify-between gap-4 py-4 pr-5 pl-5 cursor-pointer border-b-2 border-ink transition-all ${
+                    isExpanded ? 'bg-ink/[0.04]' : ''
+                  } ${
+                    activeYear === item.year ? 'bg-ink/[0.06]' : 'hover:bg-ink/[0.02]'
+                  }`}
+                >
+                  <h3 className={`flex-1 min-w-0 text-sm md:text-base font-serif transition-all duration-500 truncate ${
+                    activeYear === item.year ? 'text-ink font-medium' : (hasData ? 'opacity-100' : 'opacity-40')
+                  }`}>
+                    {item.event}
+                  </h3>
+                  <div
+                    className={`flex-shrink-0 w-8 h-8 flex items-center justify-center border-2 border-ink transition-all duration-300 ${
+                      isExpanded ? 'bg-ink text-white' : 'bg-transparent text-ink group-hover:bg-ink group-hover:text-white'
+                    }`}
+                  >
+                    <ChevronRight
+                      size={16}
+                      className={`transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}
+                    />
                   </div>
                 </div>
 
-                {/* Expanded Content */}
+                {/* Expanded Content · 仅占右列，与事件标题同列、同 px-5 左对齐 */}
                 {isExpanded && (
                   <motion.div 
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden"
+                    className="overflow-hidden col-start-2"
                   >
-                    <div className="pt-8 pb-16 px-2 space-y-8">
+                    <div className="pt-5 pb-10 px-5 space-y-5">
                       {/* Year in Review：有则展示，无则显示生成按钮 */}
                       {(() => {
                         const yearReview = yearReviews.find(
@@ -395,22 +405,22 @@ export const Timeline: React.FC = () => {
                         if (!canGenerate) return null;
                         if (isOwner) {
                           return (
-                            <div className="rounded-2xl border border-dashed border-ink/20 bg-ink/[0.02] p-5 text-center">
-                              <p className="text-xs text-muted mb-3">生成本期总结，让 AI 帮你复盘</p>
+                            <div className="border-2 border-dashed border-ink bg-white p-5 text-center">
+                              <p className="text-xs text-muted mb-3">{yr.generatePrompt ?? '生成本期总结，让 AI 帮你复盘'}</p>
                               <button
                                 onClick={() => handleGenerateYearReview(item.year)}
                                 disabled={generatingYear !== null}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm bg-accent text-paper font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 border-2 border-ink bg-ink text-white text-sm font-medium hover:bg-ink/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                               >
                                 {generatingYear === item.year ? (
                                   <>
                                     <Loader2 size={14} className="animate-spin" />
-                                    生成中...
+                                    {yr.generating ?? '生成中...'}
                                   </>
                                 ) : (
                                   <>
                                     <Sparkles size={14} />
-                                    生成 {item.year} 年度总结
+                                    {(yr.generateBtn ?? '生成 {year} 年度总结').replace('{year}', item.year)}
                                   </>
                                 )}
                               </button>
@@ -418,38 +428,38 @@ export const Timeline: React.FC = () => {
                           );
                         }
                         return (
-                          <div className="rounded-2xl border border-dashed border-ink/20 bg-ink/[0.02] p-5 text-center">
-                            <p className="text-xs text-muted mb-3">已有总结会在此展示</p>
+                          <div className="border-2 border-dashed border-ink bg-white p-5 text-center">
+                            <p className="text-xs text-muted mb-3">{yr.hasSummaryHint ?? '已有总结会在此展示'}</p>
                             <button
                               type="button"
                               onClick={() => setShowUnlockModal(true)}
                               className="text-[10px] text-muted hover:text-accent underline underline-offset-2"
                             >
-                              站长入口
+                              {yr.ownerHint ?? '站长入口'}
                             </button>
                           </div>
                         );
                       })()}
-                      <div className="grid grid-cols-1 gap-8">
+                      <div className="grid grid-cols-1 gap-5">
                         {/* Details & Influences */}
-                        <div className="space-y-6">
-                          <div className="flex items-center gap-2 text-accent font-mono text-[10px] uppercase tracking-widest">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-2 text-ink font-mono text-[10px] uppercase tracking-widest">
                             <MapPin size={12} />
                             {item.location}
                           </div>
 
-                          {/* Fulfillment Score */}
-                          <div className="p-4 bg-white rounded-2xl border border-ink/5 shadow-sm">
+                          {/* Fulfillment Score · Brutalist 无阴影粗边框 */}
+                          <div className="p-4 bg-white border-2 border-ink">
                             <div className="flex justify-between items-end mb-2">
-                              <span className="text-[9px] uppercase tracking-widest font-bold text-muted">Fulfillment</span>
+                              <span className="text-[9px] uppercase tracking-widest font-bold text-muted">{t.fulfillment ?? 'Fulfillment'}</span>
                               <span className="text-xl font-serif italic">{item.fulfillment}%</span>
                             </div>
-                            <div className="h-1 w-full bg-ink/5 rounded-full overflow-hidden">
+                            <div className="h-2 w-full bg-ink/20 overflow-hidden">
                               <motion.div 
                                 initial={{ width: 0 }}
                                 animate={{ width: `${item.fulfillment}%` }}
                                 transition={{ duration: 1 }}
-                                className="h-full bg-accent"
+                                className="h-full bg-ink"
                               />
                             </div>
                           </div>
@@ -457,10 +467,10 @@ export const Timeline: React.FC = () => {
                           {/* Influences */}
                           {item.influences.length > 0 && (
                             <div className="space-y-2">
-                              <h4 className="text-[9px] uppercase tracking-widest font-bold text-muted mb-2">书影音 / Influences</h4>
+                              <h4 className="text-[9px] uppercase tracking-widest font-bold text-muted mb-2">{t.influences ?? '书影音 / Influences'}</h4>
                               {item.influences.map((inf: any, i: number) => (
-                                <div key={i} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-ink/5 shadow-sm">
-                                  <div className="w-6 h-6 rounded-md bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                                <div key={i} className="flex items-start gap-3 p-3 bg-white border-2 border-ink">
+                                  <div className="w-6 h-6 border-2 border-ink flex items-center justify-center text-ink shrink-0">
                                     <InfluenceIcon type={inf.type} />
                                   </div>
                                   <div className="min-w-0">
@@ -474,14 +484,14 @@ export const Timeline: React.FC = () => {
                         </div>
 
                         {/* Portfolio */}
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                           {/* Photos */}
                           {item.portfolio.photos.length > 0 && (
                             <div className="grid grid-cols-2 gap-2">
                               {item.portfolio.photos.map((photoId: string, i: number) => {
                                 const photo = photos.find((p: any) => p.id === photoId || p.url === photoId);
                                 return photo ? (
-                                  <div key={i} className="aspect-square rounded-xl overflow-hidden shadow-sm">
+                                  <div key={i} className="aspect-square overflow-hidden border-2 border-ink">
                                     <img src={assetUrl(photo.url)} alt={photo.caption} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                                   </div>
                                 ) : null;
@@ -489,8 +499,8 @@ export const Timeline: React.FC = () => {
                             </div>
                           )}
 
-                          {/* Projects & Essays */}
-                          <div className="space-y-4">
+                          {/* Projects & Essays · Brutalist 粗边框 */}
+                          <div className="space-y-4 [&>*]:border-2 [&>*]:border-ink [&>*]:rounded-none [&>*]:shadow-none [&>*]:bg-white">
                             {item.portfolio.projects.map((projId: string) => {
                               const project = projects.find((p: any) => p.id === projId);
                               return project ? <ProjectCard key={project.id} project={project} /> : null;
@@ -510,25 +520,27 @@ export const Timeline: React.FC = () => {
           })}
         </div>
 
-        {/* Footer Info */}
-        <footer className="mt-32 pt-16 border-t border-ink/5 text-center">
+        {/* Footer · Brutalist 粗边框 */}
+        <footer className="mt-32 pt-16 border-t-2 border-ink text-center">
           <p className="text-muted font-serif italic text-sm">
-            她度过了充分自我实现的一生
+            {t.footer ?? '她度过了充分自我实现的一生'}
           </p>
         </footer>
         </main>
       </div>
       {/* 右侧固定栏：用 Portal 挂载到 body，避免父级 transform/overflow 影响 fixed 定位 */}
       {createPortal(
-        <aside className="fixed right-0 top-0 h-screen w-56 lg:w-64 xl:w-80 border-l border-ink/5 z-40 bg-paper/80 backdrop-blur-md overflow-y-auto max-md:hidden">
-          <div className="pt-24 pb-16 px-4 space-y-6">
-            <PersonalityPortrait
-              words={latestPortrait?.words ?? []}
-              onGenerate={isOwner ? handleGeneratePersonalityPortrait : undefined}
-              isGenerating={generatingPortrait}
-              isLoading={loadingPortraits}
-            />
-            <LocationTrailMap points={locationPoints} />
+        <aside className="fixed right-0 top-0 h-screen w-80 lg:w-96 xl:w-[28rem] border-l-2 border-ink z-40 bg-[#f8f8f4] overflow-y-auto max-md:hidden">
+          <div className="pt-24 pb-16 px-4">
+            <div className="rounded-xl bg-[#eef5ee] border border-[#d0e5d0] p-4 space-y-6">
+              <PersonalityPortrait
+                words={latestPortrait?.words ?? []}
+                onGenerate={isOwner ? handleGeneratePersonalityPortrait : undefined}
+                isGenerating={generatingPortrait}
+                isLoading={loadingPortraits}
+              />
+              <LocationTrailMap points={locationPoints} />
+            </div>
           </div>
         </aside>,
         document.body

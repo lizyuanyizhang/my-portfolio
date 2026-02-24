@@ -5,6 +5,7 @@
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, Loader2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { aggregateLocationPoints, getStaticCoords, type LocationPoint } from '../lib/geoTrailUtils';
 
@@ -50,6 +51,8 @@ function pointsSignature(points: LocationPoint[]): string {
 }
 
 export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, className = '' }) => {
+  const { data } = useLanguage();
+  const t = (data as any)?.ui?.locationTrail ?? {};
   const containerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<AMap.Map | null>(null);
   const overlaysRef = useRef<any[]>([]);
@@ -240,46 +243,46 @@ export const LocationTrailMap: React.FC<LocationTrailMapProps> = ({ points, clas
 
   if (!key) {
     return (
-      <div className={`rounded-2xl border border-dashed border-ink/20 bg-ink/[0.02] p-6 text-center ${className}`}>
-        <MapPin className="mx-auto mb-2 text-muted" size={24} />
-        <p className="text-xs text-muted">未配置高德 Key</p>
-        <p className="text-[10px] text-accent mt-1">请查看项目根目录 AMAP_KEY_GUIDE.md</p>
+      <div className={`border-2 border-ink bg-white p-6 text-center ${className}`}>
+        <MapPin className="mx-auto mb-2 text-ink" size={24} />
+        <p className="text-xs text-muted">{t.noKey ?? '未配置高德 Key'}</p>
+        <p className="text-[10px] text-ink mt-1 font-mono">{t.noKeyHint ?? '请查看 AMAP_KEY_GUIDE.md'}</p>
       </div>
     );
   }
 
   if (points.length === 0) {
     return (
-      <div className={`rounded-2xl border border-dashed border-ink/15 bg-ink/[0.02] p-6 text-center ${className}`}>
-        <MapPin className="mx-auto mb-2 text-muted" size={24} />
-        <p className="text-xs text-muted">暂无地理轨迹</p>
+      <div className={`border-2 border-ink bg-white p-6 text-center ${className}`}>
+        <MapPin className="mx-auto mb-2 text-ink" size={24} />
+        <p className="text-xs text-muted">{t.noPoints ?? '暂无地理轨迹'}</p>
       </div>
     );
   }
 
   if (status === 'loading') {
     return (
-      <div className={`rounded-2xl border border-ink/10 bg-white/80 p-6 flex flex-col items-center justify-center min-h-[200px] ${className}`}>
-        <Loader2 className="animate-spin text-accent mb-2" size={24} />
-        <p className="text-xs text-muted">正在加载地图...</p>
+      <div className={`border-2 border-ink bg-white p-6 flex flex-col items-center justify-center min-h-[200px] ${className}`}>
+        <Loader2 className="animate-spin text-ink mb-2" size={24} />
+        <p className="text-xs text-muted">{t.loading ?? '正在加载地图...'}</p>
       </div>
     );
   }
 
   if (status === 'error') {
     return (
-      <div className={`rounded-2xl border border-dashed border-ink/20 bg-ink/[0.02] p-6 text-center ${className}`}>
-        <MapPin className="mx-auto mb-2 text-muted" size={24} />
+      <div className={`border-2 border-ink bg-white p-6 text-center ${className}`}>
+        <MapPin className="mx-auto mb-2 text-ink" size={24} />
         <p className="text-xs text-muted">{errorMsg}</p>
-        <p className="text-[10px] text-accent mt-2">检查 Key / 安全密钥 / 白名单，详见 AMAP_KEY_GUIDE.md</p>
+        <p className="text-[10px] text-ink mt-2 font-mono">{t.checkKey ?? '检查 Key / 安全密钥 / 白名单'}</p>
       </div>
     );
   }
 
   return (
-    <div className={`rounded-2xl border border-ink/10 bg-white/80 overflow-hidden shadow-sm ${className}`}>
+    <div className={`border-2 border-ink bg-white overflow-hidden ${className}`}>
       <h4 className="text-[9px] uppercase tracking-widest font-bold text-muted px-4 pt-3 pb-2 font-mono">
-        地理轨迹
+        {t.title ?? '地理轨迹'}
       </h4>
       <div ref={containerRef} className="w-full h-[200px]" />
     </div>

@@ -18,37 +18,36 @@
   "projects": [
     {
       "id": "1",
-      "title": "Neujahrsgruß-Karten-Generator",
-      "description": "Ein Kartengenerator mit LLM-API für optimierte Wünsche.",
-      "image": "/images/projects/newyear-card.png",
-      "tags": [
-        "React",
-        "Neujahr",
-        "AI",
-        "Qwen"
-      ],
-      "date": "2024",
+      "title": "Neue Frühjahrskarten Generator",
+      "description": "",
+      "image": "/images/elog/project-311391f7-355e-80f5-b32b-c279708ff3cd.jpg",
       "link": "https://newyear-card-generator-55mu.vercel.app/",
+      "date": "2026-02-15",
+      "tags": [],
       "builtWith": [
-        "Cursor",
-        "React",
-        "Vite"
+        "|-"
       ]
     }
   ],
   "videos": [
     {
       "id": "1",
-      "title": "Ein Tag auf Shanghais Straßen",
-      "description": "Citywalk-Aufnahmen mit dem Handy, Erkundung der Stadt.",
-      "cover": "https://img.cdn1.vip/i/6997080b2d655_1771505675.webp",
-      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "duration": "3:42",
-      "tags": [
-        "Dokumentation",
-        "Stadt"
-      ],
-      "date": "2024-12"
+      "title": "Hinton interview at 2018 Folgen Sie dem Leben der Ernsthaftkeit",
+      "description": "Hinton interview at 2018 Folgen Sie dem Leben der Ernsthaftkeit",
+      "cover": "https://prod-files-secure.s3.us-west-2.amazonaws.com/90c391f7-355e-81bf-8e3a-0003e683b381/08d18933-65c6-49d5-9e43-55173e4be20e/%E6%88%AA%E5%B1%8F2026-02-24_%E4%B8%8B%E5%8D%8812.28.20.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466TENKVT5Y%2F20260224%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260224T044344Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjECQaCXVzLXdlc3QtMiJGMEQCIA%2Bx1%2FQ%2FJ2PeZPBBSOVdpLiksgbuFcml2P%2FchsoGGhiXAiBoJmats0lyi22xeEJHpy0CjXLIBEW3Dby3moIev3ByuiqIBAjt%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIM0RIkHdTqisXjvsPHKtwDLb56MCmtflAelwGt3oeZpY6EZXKt%2Bq8LcviQ9gzYMnnqRSG25zCXI2KR64qNhni8O1joe4RWryk3Julk5lqBLRrAM8TTFQOryJfvpFRRgjo4eDqP2iHYB8lN7n%2B5GCAFX%2BbgF4L7L4GKJGd%2BcNh4wfI6d%2BoV4Ptg10RBw7Nkz3vbCKC9wwdNMiEsF5NXApmB%2FWm9Yq6iSaDLAhGKvazUzh94g3fdczxIid1TiMxn1yLoNDT%2BZpSpBDJMcW0gq2NdWKZkzMwmDvigC4GKaSlQ%2BdycHq%2FHtJd%2B97%2Bwi1ZCO2J9QBjbbr5D5%2BT9jLfuWVkYQvRcC04VudMaxO1wr5Vz2XdKO80KmlhzV%2BcaswD44e9KD76%2FKk3iHoo%2BwP5OPmT2XRrhZqikPMjenTwTU1usLqTYhb9T3IngNU%2BmD6uJwv1j%2BnCieneUyzFCpO70iJJQ2FoUebNSPwgkBdI8A0oiAJ0QTW6zKDGuG3%2FDshV7kU8CRG98NRkXb%2FakaMA8tsq5JOZ3dt1BJfDlexnTpV4FRh3Yp4ny%2FbBAP5If%2F4NZ1Gza2HTWI5z6SrfpbXJL8ELoUTpSVvPm2DvpwZqIqqBR5AtMV8cBPSoTh5KjG5Ut6yoHWJNGbfCzPn25j34w%2Fbn0zAY6pgGt%2FuEnw1X6O34qdAsTi1%2FarjKjktNDv4MpiX6Bnqm3C3eTa4F5UfWerfMNNuxkKh8dNn9KKAe5%2BRjCOSmYIdYXuH5QAKRG1irCwF6DCMrP73hxyV%2BOg7cOOkbw5SfeoOrERU1aU4NIYEuXoSgBQgQSSEfsTsHtiwpZpTAlHy3dJwQwas4e3lGeEWGFeikEBhazA6ZbOyZdKFjyHSMy8YPlIGYfxkDC&X-Amz-Signature=be35c0bed6d836c58ed714e954df8f1443897eb6f7510ab90efa3de38a272a60&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+      "videoUrl": "【Hinton interview at 2018 绝对遵循求真的人生】 https://www.bilibili.com/video/BV1Zy2GYWERS/?share_source=copy_web&vd_source=4a712621c5e71c67776adaad3697af23",
+      "duration": "57:45",
+      "tags": [],
+      "date": "2026-02-24"
+    }
+  ],
+  "followLinks": [
+    {
+      "id": "1",
+      "name": "Jeff Dean的推特",
+      "url": "https://x.com/JeffDean",
+      "type": "Sonstige",
+      "description": "最近在看Jeff Dean"
     }
   ],
   "essays": [
@@ -181,7 +180,7 @@
       "apps": "Projekte",
       "timeline": "Zeitachse",
       "audio": "Nachrichten",
-      "video": "Videos"
+      "follow": "Was ich folge"
     },
     "wechat": "WeChat Official Account",
     "xiaohongshu": "Xiaohongshu",
@@ -207,6 +206,14 @@
         "随笔": "Essay"
       }
     },
+    "photography": {
+      "tabPhotos": "Fotos",
+      "tabVideos": "Videos",
+      "subtitlePhotos": "Eine Sammlung meiner Fotos, eingefangene Momente unterwegs.",
+      "subtitleVideos": "Lebensmomente, KI-generierte visuelle Experimente, die Gegenwart festgehalten.",
+      "noPhotos": "Noch keine Werke. Lade Fotos in deiner Notion-Fotografie-Datenbank hoch und synchronisiere.",
+      "noVideos": "Noch keine Videos. Füge Videolinks in deiner Notion-Videos-Datenbank hinzu und synchronisiere."
+    },
     "visitor": "{count} Besucher waren hier",
     "lifeTimerName": "Liz Zhang",
     "lifeTimerSuffix": "lebt seit",
@@ -219,6 +226,55 @@
       "Sek"
     ],
     "noData": "Keine Daten",
-    "shortcuts": "/ oder ⌘K suchen · H Start N Zeitachse R Zufällig"
+    "shortcuts": "/ oder ⌘K suchen · H Start N Zeitachse R Zufällig",
+    "follow": {
+      "title": "Was ich folge",
+      "subtitle": "Websites und Inhalte, die ich lese und lerne, mit Besuchern geteilt.",
+      "noLinks": "Noch keine Inhalte. Füge Links in deiner Notion-Datenbank hinzu und synchronisiere."
+    },
+    "timeline": {
+      "blankEvent": "Leere der Jahre",
+      "unknownLocation": "Unbekannt",
+      "mobileOverviewTitle": "Persönlichkeitsporträt · Ortsverlauf",
+      "footer": "Sie hat ein voll selbstverwirklichtes Leben gelebt",
+      "fulfillment": "Fulfillment",
+      "influences": "Bücher / Filme / Musik"
+    },
+    "personalityPortrait": {
+      "title": "Persönlichkeitsporträt",
+      "loading": "Laden...",
+      "description": "Persönlichkeits-Wortwolke monatlich aus Texten, Fotos, Zeitachse und mehr.",
+      "generateBtn": "Dieses Monat generieren",
+      "generating": "Wird generiert...",
+      "ownerHint": "Besitzer-Eingang"
+    },
+    "locationTrail": {
+      "title": "Ortsverlauf",
+      "noKey": "AMap Key nicht konfiguriert",
+      "noKeyHint": "Siehe AMAP_KEY_GUIDE.md",
+      "noPoints": "Noch kein Ortsverlauf",
+      "loading": "Karte wird geladen...",
+      "checkKey": "Key / Sicherheitscode / Whitelist prüfen"
+    },
+    "yearReview": {
+      "annualWord": "Jahreswort",
+      "generatePrompt": "KI-generierte Zusammenfassung erstellen",
+      "generating": "Wird generiert...",
+      "generateBtn": "{year} Jahresrückblick generieren",
+      "hasSummaryHint": "Zusammenfassung erscheint hier",
+      "ownerHint": "Besitzer-Eingang",
+      "done": "Was wurde gemacht",
+      "success": "Was wurde erreicht",
+      "fail": "Unvollendet / Gescheitert",
+      "learned": "Was gelernt wurde",
+      "metrics": {
+        "essays_written": "Texte",
+        "projects_shipped": "Projekte",
+        "photos_added": "Fotos",
+        "videos_published": "Videos",
+        "voice_messages_received": "Sprachnachrichten",
+        "text_messages_received": "Textnachrichten"
+      }
+    }
   }
 }

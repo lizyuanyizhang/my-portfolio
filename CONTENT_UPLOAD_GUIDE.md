@@ -326,12 +326,16 @@
 
 ## 五、应用
 
-**数据来源**：`src/data.json` → `projects`
+**数据来源**：`src/i18n/data.zh.json`（及 en/de）→ `projects`
 
-### 修改步骤
+### 方式 A：Notion 同步（推荐）
+
+在 Notion 维护应用数据库，执行 `npm run sync` 自动同步到 zh/en/de。详见 [应用_NOTION_ELOG_SETUP.md](./应用_NOTION_ELOG_SETUP.md)。
+
+### 方式 B：手动编辑
 
 1. 准备项目封面图（建议 16:9），放入 `public/images/projects/` 或使用外链
-2. 打开 `src/data.json`，在 `projects` 数组中添加：
+2. 打开 `src/i18n/data.zh.json`（及 en/de），在 `projects` 数组中添加：
 
 ```json
 {
@@ -361,7 +365,7 @@
 
 ### 无链接项目
 
-若暂无链接，`link` 可填 `"#"`，卡片将不可点击。
+若暂无链接，`link` 可留空或填 `"#"`，卡片将不可点击。
 
 ---
 

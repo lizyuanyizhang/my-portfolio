@@ -8,10 +8,20 @@ coverage/
 !.env.example
 .elog.env
 .elog-photos.env
+.elog-videos.env
+.elog-follow.env
 content/elog-posts/
 content/elog-photos/
+content/elog-videos/
+content/elog-follow/
 elog.cache.json
 elog-photos.cache.json
+elog-videos.cache.json
+elog-follow.cache.json
+elog-projects.cache.json
+scripts/.essay-translation-cache.json
+scripts/.project-translation-cache.json
+scripts/.video-translation-cache.json
 # public/images/elog/ 已移除：摄影同步会下载 Notion 图片到此目录，需提交以部署
 
 # 本地 Supabase 配置笔记，可能包含项目信息，不提交
