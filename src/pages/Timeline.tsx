@@ -364,7 +364,7 @@ export const Timeline: React.FC = () => {
                     activeYear === item.year ? 'bg-ink/[0.06]' : 'hover:bg-ink/[0.02]'
                   }`}
                 >
-                  <h3 className={`flex-1 min-w-0 text-sm md:text-base font-serif transition-all duration-500 truncate ${
+                  <h3 className={`flex-1 min-w-0 text-sm md:text-base font-serif transition-all duration-500 whitespace-normal break-words leading-relaxed ${
                     activeYear === item.year ? 'text-ink font-medium' : (hasData ? 'opacity-100' : 'opacity-40')
                   }`}>
                     {item.event}
@@ -401,7 +401,7 @@ export const Timeline: React.FC = () => {
                         if (item.year !== '未来' && !/^\d{4}$/.test(item.year)) return null;
                         const y = parseInt(item.year, 10);
                         if (isNaN(y)) return null;
-                        const canGenerate = supabase && (y >= 2020 && y <= new Date().getFullYear());
+                        const canGenerate = supabase && hasData && y <= new Date().getFullYear();
                         if (!canGenerate) return null;
                         if (isOwner) {
                           return (

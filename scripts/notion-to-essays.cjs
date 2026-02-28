@@ -14,6 +14,7 @@ const crypto = require('crypto');
 
 const POSTS_DIR = path.join(__dirname, '../content/elog-posts');
 const CACHE_PATH = path.join(__dirname, '.essay-translation-cache.json');
+const CACHE_VERSION = '2';
 
 /** 根据中文内容生成哈希，用于判断是否需重新翻译 */
 function contentHash(essay) {
@@ -25,7 +26,9 @@ function contentHash(essay) {
 function loadCache() {
   try {
     if (fs.existsSync(CACHE_PATH)) {
-      return JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
+      const raw = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
+      if (raw && raw.version === CACHE_VERSION && raw.entries) return raw.entries;
+      return {};
     }
   } catch (e) {}
   return {};
@@ -33,7 +36,7 @@ function loadCache() {
 
 /** 保存翻译缓存 */
 function saveCache(cache) {
-  fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + '\n', 'utf-8');
+  fs.writeFileSync(CACHE_PATH, JSON.stringify({ version: CACHE_VERSION, entries: cache }, null, 2) + '\n', 'utf-8');
 }
 
 function stripMarkdown(text) {
@@ -120,7 +123,90 @@ async function translateWithDeepL(text, targetLang) {
 
 /** 百度翻译 API：中文→目标语言，sign = md5(appid+q+salt+密钥) */
 const BAIDU_URL = 'https://fanyi-api.baidu.com/api/trans/vip/translate';
-async function translateWithBaidu(text, targetLang) {
+const BAIDU_MAX_BYTES = 4500;
+
+function byteLength(str) {
+  return Buffer.byteLength(str || '', 'utf8');
+}
+
+function splitTextByBytes(text, maxBytes) {
+  if (!text) return [''];
+  if (byteLength(text) <= maxBytes) return [text];
+  const parts = text.split(/\n\n+/);
+  const chunks = [];
+  let current = '';
+  for (const part of parts) {
+    const candidate = current ? `${current}\n\n${part}` : part;
+    if (byteLength(candidate) <= maxBytes) {
+      current = candidate;
+      continue;
+    }
+    if (current) {
+      chunks.push(current);
+      current = '';
+    }
+    if (byteLength(part) <= maxBytes) {
+      current = part;
+      continue;
+    }
+    const lines = part.split('\n');
+    let lineBuf = '';
+    for (const line of lines) {
+      const lineCandidate = lineBuf ? `${lineBuf}\n${line}` : line;
+      if (byteLength(lineCandidate) <= maxBytes) {
+        lineBuf = lineCandidate;
+        continue;
+      }
+      if (lineBuf) {
+        chunks.push(lineBuf);
+        lineBuf = '';
+      }
+      if (byteLength(line) <= maxBytes) {
+        lineBuf = line;
+        continue;
+      }
+      const sentences = line.split(/(?<=[。！？!?])\s*/);
+      let sentBuf = '';
+      for (const sentence of sentences) {
+        const sentCandidate = sentBuf ? `${sentBuf}${sentence}` : sentence;
+        if (byteLength(sentCandidate) <= maxBytes) {
+          sentBuf = sentCandidate;
+          continue;
+        }
+        if (sentBuf) {
+          chunks.push(sentBuf);
+          sentBuf = '';
+        }
+        if (byteLength(sentence) <= maxBytes) {
+          sentBuf = sentence;
+          continue;
+        }
+        let start = 0;
+        while (start < sentence.length) {
+          let end = start + 1000;
+          let slice = sentence.slice(start, end);
+          while (byteLength(slice) > maxBytes && end > start) {
+            end -= 100;
+            slice = sentence.slice(start, end);
+          }
+          if (!slice) break;
+          chunks.push(slice);
+          start = end;
+        }
+      }
+      if (sentBuf) {
+        chunks.push(sentBuf);
+      }
+    }
+    if (lineBuf) {
+      chunks.push(lineBuf);
+    }
+  }
+  if (current) chunks.push(current);
+  return chunks.filter((c) => c && c.trim().length > 0);
+}
+
+async function translateWithBaiduChunk(text, targetLang) {
   const appId = (process.env.BAIDU_APP_ID || '').trim();
   const secret = (process.env.BAIDU_SECRET_KEY || '').trim();
   if (!appId || !secret) return text;
@@ -129,8 +215,10 @@ async function translateWithBaidu(text, targetLang) {
   const sign = crypto.createHash('md5').update(appId + text + salt + secret).digest('hex');
   try {
     const params = new URLSearchParams({ q: text, from: 'zh', to, appid: appId, salt, sign });
+    console.log(`[DEBUG] Baidu Translate Request: q=${text.slice(0, 50)}..., to=${to}`);
     const res = await fetch(BAIDU_URL + '?' + params.toString());
     const json = await res.json();
+    console.log(`[DEBUG] Baidu Translate Response:`, JSON.stringify(json, null, 2));
     if (json.error_code) throw new Error(`百度 ${json.error_code}: ${json.error_msg}`);
     const out = json?.trans_result?.[0]?.dst;
     return (out && out.trim()) || text;
@@ -138,6 +226,20 @@ async function translateWithBaidu(text, targetLang) {
     console.warn('百度翻译失败:', err?.message || err);
     return text;
   }
+}
+
+async function translateWithBaidu(text, targetLang) {
+  const chunks = splitTextByBytes(text, BAIDU_MAX_BYTES);
+  if (chunks.length === 1) {
+    return translateWithBaiduChunk(text, targetLang);
+  }
+  const translated = [];
+  for (const chunk of chunks) {
+    const out = await translateWithBaiduChunk(chunk, targetLang);
+    translated.push(out);
+    await new Promise((r) => setTimeout(r, 120));
+  }
+  return translated.join('\n\n');
 }
 
 /** 火山引擎翻译 API：SourceLanguage=zh, TargetLanguage=en|de */

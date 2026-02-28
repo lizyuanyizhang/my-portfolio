@@ -13,9 +13,23 @@ export const Essays: React.FC = () => {
   const essays = (data as { essays: Essay[] }).essays;
   const [activeCategory, setActiveCategory] = useState<string>('全部');
 
+  const isDuplicateEssay = (essay: Essay) => {
+    const title = (essay.title || '').toLowerCase();
+    const category = (essay.category || '').toLowerCase();
+    return (
+      title.includes('原创') ||
+      title.includes('original article') ||
+      title.includes('original works') ||
+      title.includes('original _') ||
+      title.includes('originell') ||
+      category.includes('原创')
+    );
+  };
+
   const filteredEssays = useMemo(() => {
-    if (activeCategory === '全部') return essays;
-    return essays.filter((e) => (e.category || '随笔') === activeCategory);
+    const visible = essays.filter((e) => !isDuplicateEssay(e));
+    if (activeCategory === '全部') return visible;
+    return visible.filter((e) => (e.category || '随笔') === activeCategory);
   }, [essays, activeCategory]);
 
   return (

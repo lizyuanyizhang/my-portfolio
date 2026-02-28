@@ -8,7 +8,20 @@ export const EssayDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data } = useLanguage();
   const essays = (data as { essays: Array<{ id: string; title: string; excerpt: string; date: string; category?: string; content?: string }> }).essays;
-  const essay = essays.find((e) => e.id === id);
+  const isDuplicateEssay = (essay: { title: string; category?: string }) => {
+    const title = (essay.title || '').toLowerCase();
+    const category = (essay.category || '').toLowerCase();
+    return (
+      title.includes('原创') ||
+      title.includes('original article') ||
+      title.includes('original works') ||
+      title.includes('original _') ||
+      title.includes('originell') ||
+      category.includes('原创')
+    );
+  };
+  const visibleEssays = essays.filter((e) => !isDuplicateEssay(e));
+  const essay = visibleEssays.find((e) => e.id === id);
 
   if (!essay) {
     return (

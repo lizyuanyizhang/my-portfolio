@@ -76,7 +76,7 @@ export const Home: React.FC = () => {
               ))}
               {personalInfo.wechatQR && (
                 <div
-                  className="group relative flex items-center gap-3 text-muted hover:text-accent transition-colors cursor-pointer min-h-[44px] items-center"
+                  className="group relative flex items-center gap-3 text-muted hover:text-accent transition-colors cursor-pointer min-h-[44px]"
                   onClick={() => setWechatQRVisible((v) => !v)}
                   role="button"
                   tabIndex={0}
@@ -86,12 +86,20 @@ export const Home: React.FC = () => {
                     <MessageCircle size={20} />
                   </span>
                   <span className="text-sm font-medium">{ui.wechat}</span>
-                  <div className={`absolute left-0 bottom-full mb-3 transition-all translate-y-2 z-10 md:group-hover:translate-y-0 ${wechatQRVisible ? 'opacity-100 translate-y-0' : 'opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0'}`}>
-                    <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10 w-48 sm:w-64">
-                      <img src={assetUrl(personalInfo.wechatQR)} alt="WeChat QR" className="w-full h-auto rounded-lg" referrerPolicy="no-referrer" />
-                      <p className="text-ink text-xs text-center mt-2 font-sans">{ui.scanQR}</p>
-                    </div>
-                  </div>
+                  {wechatQRVisible && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute left-0 top-full mt-3 z-10"
+                    >
+                      <div className="bg-white p-4 rounded-2xl shadow-xl border border-ink/10 w-48 sm:w-64">
+                        <img src={assetUrl(personalInfo.wechatQR)} alt="WeChat QR" className="w-full h-auto rounded-lg" referrerPolicy="no-referrer" />
+                        <p className="text-ink text-xs text-center mt-2 font-sans">{ui.scanQR}</p>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
               )}
             </div>
