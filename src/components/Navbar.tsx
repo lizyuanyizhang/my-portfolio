@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
           </Link>
           <button onClick={OPEN_PALETTE} className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-muted hover:text-accent hover:bg-ink/5 transition-all text-xs font-medium border-l border-ink/10 ml-1 min-h-[44px]" title={(data as { ui?: { shortcuts?: string } }).ui?.shortcuts} aria-label="快捷键搜索">
             <Search size={14} className="shrink-0" />
-            <span className="hidden md:inline">{(data as { ui?: { shortcuts?: string } }).ui?.shortcuts ?? '按 / 或 ⌘K 搜索 · H 首页 N 时间轴 R 随机'}</span>
+            <span className="hidden md:inline">{(data as { ui?: { shortcutsShort?: string } }).ui?.shortcutsShort ?? '按 / 搜索'}</span>
             <span className="md:hidden font-mono">/</span>
           </button>
           <div className="shrink-0 border-l border-ink/15 pl-2">

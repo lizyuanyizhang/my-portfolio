@@ -95,12 +95,13 @@ export const Audio: React.FC = () => {
             : {};
       const recorder = new MediaRecorder(stream, mimeOpt);
       chunksRef.current = [];
+      const recordingStartTime = Date.now(); // 记录录音开始时间
       recorder.ondataavailable = (e) => e.data.size > 0 && chunksRef.current.push(e.data);
       recorder.onstop = async () => {
         stream.getTracks().forEach((t) => t.stop());
         const mime = recorder.mimeType || 'audio/webm';
         const blob = new Blob(chunksRef.current, { type: mime });
-        await uploadRecording(blob, recorder.startTime);
+        await uploadRecording(blob, recordingStartTime);
       };
       recorder.start(250);
       mediaRecorderRef.current = recorder;

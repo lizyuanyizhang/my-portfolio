@@ -32,8 +32,10 @@ function extractDbId(val) {
 const DB_ID = extractDbId(process.env.NOTION_DATABASE_RESUME_ID);
 
 /** 从 Notion 属性提取纯文本 */
-function getPlainText(prop) {
+function getPlainText(prop, propName = '') {
   if (!prop) return '';
+  // 添加日志输出，用于调试
+  // console.log(`[DEBUG] getPlainText called for: ${propName}, type: ${prop.type}, prop:`, JSON.stringify(prop, null, 2));
   if (prop.type === 'title') {
     return (prop.title || []).map((t) => t.plain_text).join('');
   }
@@ -47,6 +49,7 @@ function getPlainText(prop) {
     const start = d.start ? String(d.start).slice(0, 10) : '';
     const end = d.end ? String(d.end).slice(0, 10) : '';
     if (start && end && start !== end) return `${start} → ${end}`;
+    if (start && !end) return `${start} → Present`;
     return start || end || '';
   }
   const val = prop[prop.type];
@@ -121,7 +124,7 @@ function pageToResumeItem(page, nameToId) {
   const roleOrDegree = roleText || degreeText;
   const company = getPlainText(get(['company', '公司']));
   const school = getPlainText(get(['school', '学校']));
-  const major = getPlainText(get(['major', '专业']));
+  const major = getPlainText(get(['major', '专业']), 'major');
   const period = getPlainText(get(['period', '时间段']));
   const detailsText = getPlainText(get(['details', '工作内容']));
   const skill = getPlainText(get(['skill', '技能项']));

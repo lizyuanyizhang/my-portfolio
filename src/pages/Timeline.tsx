@@ -250,7 +250,7 @@ export const Timeline: React.FC = () => {
   return (
     <div className="timeline-brutalist relative flex min-h-screen bg-[#f8f8f4]">
       {/* Left Sidebar Timeline - 粗野风格：粗黑边框，保留年份字体 */}
-      <aside className="fixed left-0 top-0 h-screen w-20 md:w-24 border-r-2 border-ink flex flex-col z-40 bg-[#f8f8f4]">
+      <aside className="fixed left-0 top-0 h-screen w-20 md:w-24 border-r border-ink/20 flex flex-col z-40 bg-[#f8f8f4]">
         <div 
           ref={sidebarRef}
           className="flex-1 overflow-y-auto no-scrollbar py-32 px-4 space-y-2"
@@ -358,7 +358,7 @@ export const Timeline: React.FC = () => {
                 {/* 右列：事件标题 + 展开按钮，与下方展开内容共享 px-5，左对齐 */}
                 <div
                   onClick={() => toggleYear(item.year)}
-                  className={`group flex items-center justify-between gap-4 py-4 pr-5 pl-5 cursor-pointer border-b-2 border-ink transition-all ${
+                  className={`group flex items-center justify-between gap-4 py-4 pr-5 pl-5 cursor-pointer border-b border-ink/20 transition-all ${
                     isExpanded ? 'bg-ink/[0.04]' : ''
                   } ${
                     activeYear === item.year ? 'bg-ink/[0.06]' : 'hover:bg-ink/[0.02]'
@@ -370,7 +370,7 @@ export const Timeline: React.FC = () => {
                     {item.event}
                   </h3>
                   <div
-                    className={`flex-shrink-0 w-8 h-8 flex items-center justify-center border-2 border-ink transition-all duration-300 ${
+                    className={`flex-shrink-0 w-8 h-8 flex items-center justify-center transition-all duration-300 ${
                       isExpanded ? 'bg-ink text-white' : 'bg-transparent text-ink group-hover:bg-ink group-hover:text-white'
                     }`}
                   >
@@ -449,7 +449,7 @@ export const Timeline: React.FC = () => {
                           </div>
 
                           {/* Fulfillment Score · Brutalist 无阴影粗边框 */}
-                          <div className="p-4 bg-white border-2 border-ink">
+                          <div className="p-4 bg-white border border-ink/10">
                             <div className="flex justify-between items-end mb-2">
                               <span className="text-[9px] uppercase tracking-widest font-bold text-muted">{t.fulfillment ?? 'Fulfillment'}</span>
                               <span className="text-xl font-serif italic">{item.fulfillment}%</span>
@@ -521,7 +521,7 @@ export const Timeline: React.FC = () => {
         </div>
 
         {/* Footer · Brutalist 粗边框 */}
-        <footer className="mt-32 pt-16 border-t-2 border-ink text-center">
+        <footer className="mt-32 pt-16 border-t border-ink/20 text-center">
           <p className="text-muted font-serif italic text-sm">
             {t.footer ?? '她度过了充分自我实现的一生'}
           </p>
@@ -530,9 +530,9 @@ export const Timeline: React.FC = () => {
       </div>
       {/* 右侧固定栏：用 Portal 挂载到 body，避免父级 transform/overflow 影响 fixed 定位 */}
       {createPortal(
-        <aside className="fixed right-0 top-0 h-screen w-80 lg:w-96 xl:w-[28rem] border-l-2 border-ink z-40 bg-[#f8f8f4] overflow-y-auto max-md:hidden">
+        <aside className="fixed right-0 top-0 h-screen w-80 lg:w-96 xl:w-[28rem] border-l border-ink/20 z-40 bg-[#f8f8f4] overflow-y-auto max-md:hidden">
           <div className="pt-24 pb-16 px-4">
-            <div className="rounded-xl bg-[#eef5ee] border border-[#d0e5d0] p-4 space-y-6">
+            <div className="rounded-xl bg-[#eef5ee] border border-ink/10 p-4 space-y-6">
               <PersonalityPortrait
                 words={latestPortrait?.words ?? []}
                 onGenerate={isOwner ? handleGeneratePersonalityPortrait : undefined}

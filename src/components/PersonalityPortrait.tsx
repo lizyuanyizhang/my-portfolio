@@ -56,7 +56,7 @@ export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
   if (items.length === 0) {
     return (
       <div
-        className={`border-2 border-ink bg-white p-6 text-center min-h-[230px] flex flex-col justify-center ${className}`}
+        className={`border border-ink/10 bg-white p-6 text-center min-h-[230px] flex flex-col justify-center ${className}`}
       >
         <p className="text-xs font-mono uppercase tracking-widest text-muted mb-2">{t.title ?? '人格画像'}</p>
         {isLoading ? (
@@ -71,7 +71,7 @@ export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
                 type="button"
                 onClick={onGenerate}
                 disabled={isGenerating}
-                className="text-xs border-2 border-ink px-3 py-1.5 font-medium hover:bg-ink hover:text-white disabled:opacity-50 transition-colors"
+                className="text-xs border border-ink/10 px-3 py-1.5 font-medium hover:bg-ink hover:text-white disabled:opacity-50 transition-colors"
               >
                 {isGenerating ? (t.generating ?? '生成中...') : (t.generateBtn ?? '生成本月人格画像')}
               </button>
@@ -86,7 +86,7 @@ export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={`border-2 border-ink bg-white p-4 overflow-hidden min-h-[230px] flex flex-col ${className}`}
+      className={`border border-ink/10 bg-white p-4 overflow-hidden min-h-[230px] flex flex-col ${className}`}
     >
       <h4 className="text-[9px] uppercase tracking-widest font-mono font-bold text-muted mb-3 shrink-0">
         {t.title ?? '人格画像'}
@@ -98,12 +98,12 @@ export const PersonalityPortrait: React.FC<PersonalityPortraitProps> = ({
       >
         {items.map(({ text, size, rotation, color }, i) => (
           <span
-            key={`${text}-${i}`}
-            className="inline-block font-serif font-normal whitespace-nowrap transition-transform hover:scale-110"
+            key={text}
+            className="font-serif font-semibold"
             style={{
-              fontSize: `${size * 0.7}rem`,
-              color,
+              fontSize: `${size}rem`,
               transform: `rotate(${rotation}deg)`,
+              color: color,
             }}
           >
             {text}

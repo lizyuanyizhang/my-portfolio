@@ -27,8 +27,8 @@ export function extractKeywordsForYear(
     photos?: { id: string; caption?: string; location?: string; date?: string }[];
     timeline?: { year: string; event?: string; location?: string }[];
   },
-  yearReview?: { annual_word?: string | null; summary_done?: string | null; summary_success?: string | null } | null,
-  year: string
+  year: string,
+  yearReview?: { annual_word?: string | null; summary_done?: string | null; summary_success?: string | null } | null
 ): KeywordItem[] {
   const count = new Map<string, number>();
 

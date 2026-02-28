@@ -37,17 +37,17 @@ export const YearReviewCard: React.FC<YearReviewCardProps> = ({ review }) => {
   const getLabel = (key: string) => metricLabels[key] ?? DEFAULT_METRIC_LABELS[key] ?? key;
   
   const metrics = review.metrics ?? {};
-  const entries = Object.entries(metrics).filter(([, v]) => v != null && v > 0);
+  const entries = Object.entries(metrics).filter(([, v]) => v != null && (v as number) > 0);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border-2 border-ink bg-white p-4 md:p-5 space-y-4"
+      className="border-x border-t border-ink/10 bg-white p-4 md:p-5"
     >
       {/* 年度词（仅年度类型显示） */}
       {review.annual_word && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-4">
           <Sparkles size={18} className="text-ink shrink-0" />
           <div>
             <p className="text-[9px] uppercase tracking-widest text-muted font-mono">{yr.annualWord ?? '年度词'}</p>
@@ -58,13 +58,13 @@ export const YearReviewCard: React.FC<YearReviewCardProps> = ({ review }) => {
 
       {/* 数据看板 */}
       {entries.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 mb-4">
           {entries.map(([key, value]) => (
             <div
               key={key}
-              className="flex items-center gap-2 p-3 border-2 border-ink bg-white"
+              className="flex items-center gap-2 p-3 border border-ink/10 bg-white"
             >
-              <div className="w-8 h-8 border-2 border-ink flex items-center justify-center text-ink shrink-0">
+              <div className="w-8 h-8 border border-ink/10 flex items-center justify-center text-ink shrink-0">
                 {METRIC_ICONS[key] ?? <FileText size={14} />}
               </div>
               <div className="min-w-0">
@@ -77,7 +77,7 @@ export const YearReviewCard: React.FC<YearReviewCardProps> = ({ review }) => {
       )}
 
       {/* 做了什么 / 成功 / 失败 / 学到 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
         {review.summary_done && (
           <div>
             <h4 className="text-[9px] uppercase tracking-widest text-muted font-mono mb-1">{yr.done ?? '做了什么'}</h4>

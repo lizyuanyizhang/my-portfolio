@@ -49,8 +49,8 @@ export const Essays: React.FC = () => {
         </motion.div>
       </div>
 
-      <div className="px-4 sm:px-6 md:px-10">
-        <div className="max-w-[42rem]">
+      <div className="px-4 sm:px-6 md:px-10 max-w-3xl mx-auto">
+        <div className="w-full">
           <div className="space-y-0 border-t border-ink/10 text-left">
             {filteredEssays.length === 0 ? (
               <p className="py-16 text-[#444] font-mono text-sm text-left">
